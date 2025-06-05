@@ -1,0 +1,89 @@
+// hooks/useTodos.ts
+import { useState } from "react";
+import {Priority, Todo} from "../../../models/Todos";
+
+export const TodoListProvider = () => {
+    // 투두 요소들 배열 상태
+    const [todos, setTodos] = useState<Todo[]>([]);
+    // 새 투두 생성시 사용될 인풋값 상태
+    const [input, setInput] = useState<string>("");
+    // 새 투두 생성시 사용될 우선순위 셀렉트값 상태
+    const [priority, setPriority] = useState<Priority>("medium");
+    // 우선순위에 따른 필터링 기능 사용시 사용될 필터값 상태
+    const [filter, setFilter] = useState<Priority | "all">("all");
+
+    /*
+        투두 추가 함수
+    */
+    const addTodo = () => {
+        // 인풋 값이 공백이거나 없을 경우 함수 종료
+        if (!input.trim()) return;
+
+        // 투두 인터페이스 객체를 토대로 새로운 객체 인스턴스
+        const newTodo: Todo = {
+            id: Date.now(),
+            text: input,
+            completed: false,
+            priority,
+        };
+        // 기존 투두 리스트의 앞에 새로 인스턴스된 객체를 깊은 복사 형태로 생성하여 상태 변경
+        setTodos([newTodo, ...todos]);
+        // 인풋값 상태 변경
+        setInput("");
+    };
+
+    /*
+        투두 요소 완료 토글 함수
+    */
+    const toggleComplete = (id: number) => {
+        // 선택된 id 의 투두의 completed 필드값을 수정하여 상태 변경
+        setTodos(
+            todos.map((todo) =>
+                todo.id === id ? { ...todo, completed: !todo.completed } : todo
+            )
+        );
+    };
+
+    /*
+        투두 요소 삭제
+    */
+    const deleteTodo = (id: number) => {
+        // 선택된 id 의 투두를 배열에서 삭재 후 상태 변경
+        setTodos(todos.filter((todo) => todo.id !== id));
+    };
+
+    const setPriorityByText = (text: string) => {
+        console.log(text);
+        if (text.trim() === "높음") {
+            setPriority("high");
+        } else if (text.trim() === "중간") {
+            setPriority("medium");
+        } else {
+            setPriority("low");
+        }
+    }
+
+    /*
+        투두 필터링 기능
+    */
+    const filteredTodos = todos
+        .filter((todo) => filter === "all" || todo.priority === filter)
+        .sort((a, b) => {
+            const order: Record<Priority, number> = { high: 0, medium: 1, low: 2 };
+            return order[a.priority] - order[b.priority];
+        });
+
+    return {
+        todos,
+        input,
+        priority,
+        filter,
+        setInput,
+        setPriority,
+        setFilter,
+        addTodo,
+        toggleComplete,
+        deleteTodo,
+        filteredTodos,
+    };
+};
