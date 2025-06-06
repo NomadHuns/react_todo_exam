@@ -23,10 +23,6 @@ const PRIORITY_LABELS: Record<Priority, string> = {
 const TodoListElement: React.FC<TodoListElementProp> = ({ todo, toggleComplete, deleteTodo, changeText, setPriority }) => {
     const [isOpen, setIsOpen] = useState(false);
 
-    const handleToggleDetail = () => {
-        setIsOpen(prev => !prev);
-    };
-
     return (
         <>
             <li style={styles.todoItem}>

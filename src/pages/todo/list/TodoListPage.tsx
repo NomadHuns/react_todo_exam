@@ -40,7 +40,13 @@ const TodoListPage: React.FC = () => {
 
             <div style={styles.filterRow}>
                 {["all", ...PRIORITY_OPTIONS.map(value => value.value)].map((f) => (
-                    <MyButton key={f} onClick={() => setFilter(f as Priority | "all")}
+                    <MyButton key={f}
+                              onClick={() => {
+                                  setFilter(f as Priority | "all");
+                                  if (f !== "all") {
+                                      setPriority(f as Priority);
+                                  }
+                              }}
                               text={f === "all"
                                     ? "전체"
                                     : f === "high"
