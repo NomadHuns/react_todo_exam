@@ -1,20 +1,15 @@
 // hooks/useTodos.ts
-import {useEffect, useState} from "react";
 import {Priority, Todo} from "../../../models/Todos";
 import {getKoreanISOString} from "../../../utils/FormatUtils";
+import {useRecoilState} from "recoil";
+import {todoFilterState, todoInputState, todoListState, todoPriorityState} from "./TodoListAtom";
+import React, {useEffect} from "react";
 
 export const TodoListProvider = () => {
-    // 투두 요소들 배열 상태(초기에 로컬스토리지로부터 저장된 값 받아옴)
-    const [todos, setTodos] = useState<Todo[]>(() => {
-        const stored = localStorage.getItem("todos");
-        return stored ? JSON.parse(stored) : [];
-    });
-    // 새 투두 생성시 사용될 인풋값 상태
-    const [input, setInput] = useState<string>("");
-    // 새 투두 생성시 사용될 우선순위 셀렉트값 상태
-    const [priority, setPriority] = useState<Priority>("medium");
-    // 우선순위에 따른 필터링 기능 사용시 사용될 필터값 상태
-    const [filter, setFilter] = useState<Priority | "all">("all");
+    const [todos, setTodos] = useRecoilState(todoListState);
+    const [input, setInput] = useRecoilState(todoInputState);
+    const [priority, setPriority] = useRecoilState(todoPriorityState);
+    const [filter, setFilter] = useRecoilState(todoFilterState);
 
     // todos 상태 변경시 로컬스토리지에 저장
     useEffect(() => {
