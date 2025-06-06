@@ -6,5 +6,5 @@ export interface Todo {
     text: string;
     completed: boolean;
     priority: Priority;
-    // TODO: 생성일시 추가
+    createdAt: string;
 }

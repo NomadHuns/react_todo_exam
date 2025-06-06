@@ -1,6 +1,7 @@
 // hooks/useTodos.ts
 import { useState } from "react";
 import {Priority, Todo} from "../../../models/Todos";
+import {getKoreanISOString} from "../../../utils/FormatUtils";
 
 export const TodoListProvider = () => {
     // 투두 요소들 배열 상태
@@ -25,6 +26,7 @@ export const TodoListProvider = () => {
             text: input,
             completed: false,
             priority,
+            createdAt: getKoreanISOString(),
         };
         // 기존 투두 리스트의 앞에 새로 인스턴스된 객체를 깊은 복사 형태로 생성하여 상태 변경
         setTodos([newTodo, ...todos]);

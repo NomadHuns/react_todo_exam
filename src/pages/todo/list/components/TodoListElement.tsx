@@ -1,8 +1,9 @@
 import {Priority, Todo} from "../../../../models/Todos";
-import React, {useState} from "react";
+import React from "react";
 import MyButton from "../../../../components/MyButton";
 import MyTextInput from "../../../../components/MyTextInput";
 import MySelectBox, {OptionItem} from "../../../../components/MySelectBox";
+import {formatKoreanDate} from "../../../../utils/FormatUtils";
 
 const PRIORITY_OPTIONS: OptionItem[] = [{value: "high", label:"높음"}, {value: "medium", label:"중간"}, {value: "low", label:"낮음"}];
 
@@ -84,6 +85,12 @@ const TodoListElement: React.FC<TodoListElementProp> = ({ todo, toggleComplete, 
                                 options={PRIORITY_OPTIONS}
                                 style={styles.select}
                             />
+                        </div>
+                    </div>
+                    <div style={styles.detailRow}>
+                        <div style={styles.detailLabel}>생성일시</div>
+                        <div style={styles.detailInputBoxWrap}>
+                            {formatKoreanDate(todo.createdAt)}
                         </div>
                     </div>
                     <div style={styles.detailButtonWrap}>
