@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import {Priority} from "../../../models/Todos";
 import {TodoListProvider} from "./TodoListProvider";
 import MySelectBox, {OptionItem} from "../../../components/MySelectBox";
@@ -23,6 +23,8 @@ const TodoListPage: React.FC = () => {
         filteredTodos,
     } = TodoListProvider();
 
+    const [openedId, setOpenedId] = useState<number | null>(null);
+
     return (
         <div style={styles.container}>
             <h2>TODO Exam</h2>
@@ -46,6 +48,7 @@ const TodoListPage: React.FC = () => {
                                   if (f !== "all") {
                                       setPriority(f as Priority);
                                   }
+                                  setOpenedId(null);
                               }}
                               text={f === "all"
                                     ? "전체"
@@ -70,6 +73,8 @@ const TodoListPage: React.FC = () => {
                         toggleComplete={() => toggleComplete(todo.id)}
                         changeText={(e) => putTodo({text: e, id: todo.id, priority: todo.priority, completed: todo.completed})}
                         setPriority={(e) => putTodo({text: todo.text, id: todo.id, priority: e as Priority, completed: todo.completed})}
+                        openedId={openedId}
+                        setOpenedId={setOpenedId}
                     />
                 ))}
             </ul>

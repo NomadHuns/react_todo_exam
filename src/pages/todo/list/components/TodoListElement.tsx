@@ -12,6 +12,8 @@ interface TodoListElementProp {
     deleteTodo: () => void;
     changeText: (value: string) => void;
     setPriority: (value: string) => void;
+    openedId: number | null;
+    setOpenedId: (id: number | null) => void;
 }
 
 const PRIORITY_LABELS: Record<Priority, string> = {
@@ -20,15 +22,15 @@ const PRIORITY_LABELS: Record<Priority, string> = {
     low: "🔵",
 };
 
-const TodoListElement: React.FC<TodoListElementProp> = ({ todo, toggleComplete, deleteTodo, changeText, setPriority }) => {
-    const [isOpen, setIsOpen] = useState(false);
+const TodoListElement: React.FC<TodoListElementProp> = ({ todo, toggleComplete, deleteTodo, changeText, setPriority, openedId, setOpenedId }) => {
+    const isOpen = openedId === todo.id;
 
     return (
         <>
             <li style={styles.todoItem}>
                 <div
                     style={styles.leftWrap}
-                    onClick={() => setIsOpen(prev => true)} // ✅ 왼쪽 전체를 클릭 가능하게
+                    onClick={() => setOpenedId(todo.id)} // ✅ 왼쪽 전체를 클릭 가능하게
                 >
                     <div
                         style={styles.checkboxWrapper}
@@ -73,6 +75,7 @@ const TodoListElement: React.FC<TodoListElementProp> = ({ todo, toggleComplete, 
             {/* 상세 영역 */}
             {isOpen && (
                 <div style={styles.detailBox}>
+                    {/*TODO: 디자인 수정*/}
                     <span style={{ margin: "8px 0", fontSize: 14 }}>
                         우선 순위 :
                         <MySelectBox
@@ -81,7 +84,7 @@ const TodoListElement: React.FC<TodoListElementProp> = ({ todo, toggleComplete, 
                             options={PRIORITY_OPTIONS} />
                     </span>
                     <div style={styles.detailButtonWrap}>
-                        <MyButton key={"update"} onClick={() => setIsOpen(false)} text="확인" />
+                        <MyButton key={"update"} onClick={() => setOpenedId(null)} text="확인" />
                     </div>
                 </div>
             )}
