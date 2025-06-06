@@ -1,11 +1,13 @@
 import {Priority, Todo} from "../../../../models/Todos";
 import React, {useState} from "react";
 import MyButton from "../../../../components/MyButton";
+import MyTextInput from "../../../../components/MyTextInput";
 
 interface TodoListElementProp {
     todo: Todo;
     toggleComplete: () => void;
     deleteTodo: () => void;
+    changeText: (value: string) => void;
 }
 
 const PRIORITY_LABELS: Record<Priority, string> = {
@@ -14,7 +16,7 @@ const PRIORITY_LABELS: Record<Priority, string> = {
     low: "🔵",
 };
 
-const TodoListElement: React.FC<TodoListElementProp> = ({ todo, toggleComplete, deleteTodo }) => {
+const TodoListElement: React.FC<TodoListElementProp> = ({ todo, toggleComplete, deleteTodo, changeText }) => {
     const [isOpen, setIsOpen] = useState(false);
 
     const handleToggleDetail = () => {
@@ -44,16 +46,24 @@ const TodoListElement: React.FC<TodoListElementProp> = ({ todo, toggleComplete, 
                         </label>
                     </div>
 
-                    <span
-                        style={{
-                            textDecoration: todo.completed ? "line-through" : "none",
-                            opacity: todo.completed ? 0.6 : 1,
-                            cursor: "pointer",
-                            marginLeft: 8,
-                        }}
-                    >
-                        {PRIORITY_LABELS[todo.priority]} {todo.text}
-                    </span>
+                    {isOpen && (
+                        <MyTextInput value={todo.text} onChange={(e) => changeText(e)}
+                                     placeholder={"할 일을 입력하세요."}
+                                     autoFocus={true}
+                        />
+                    )}
+                    {!isOpen && (
+                        <span
+                            style={{
+                                textDecoration: todo.completed ? "line-through" : "none",
+                                opacity: todo.completed ? 0.6 : 1,
+                                cursor: "pointer",
+                                marginLeft: 8,
+                            }}
+                        >
+                            {PRIORITY_LABELS[todo.priority]} {todo.text}
+                        </span>
+                    )}
                 </div>
 
                 <div onClick={(e) => e.stopPropagation()}> {/* ✅ 삭제 버튼도 이벤트 분리 */}

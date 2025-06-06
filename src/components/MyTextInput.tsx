@@ -4,9 +4,10 @@ interface MyTextInputProps {
     placeholder: string;
     value: string;
     onChange: (value: string) => void;
+    autoFocus? : boolean;
 }
 
-const MyTextInput: React.FC<MyTextInputProps> = ({ placeholder, value, onChange }) => {
+const MyTextInput: React.FC<MyTextInputProps> = ({ placeholder, value, onChange, autoFocus }) => {
     return (
         <input
             type="text"
@@ -14,6 +15,7 @@ const MyTextInput: React.FC<MyTextInputProps> = ({ placeholder, value, onChange 
             value={value}
             onChange={(e) => onChange(e.target.value)}
             style={styles.input}
+            autoFocus={autoFocus}
         />
     );
 };

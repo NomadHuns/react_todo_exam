@@ -33,6 +33,17 @@ export const TodoListProvider = () => {
     };
 
     /*
+        투두 요소 수정 함수
+     */
+    const putTodo = (updatedTodo: Todo) => {
+        setTodos((prevTodos) =>
+            prevTodos.map((todo) =>
+                todo.id === updatedTodo.id ? updatedTodo : todo
+            )
+        );
+    };
+
+    /*
         투두 요소 완료 토글 함수
     */
     const toggleComplete = (id: number) => {
@@ -71,6 +82,7 @@ export const TodoListProvider = () => {
         setPriority,
         setFilter,
         addTodo,
+        putTodo,
         toggleComplete,
         deleteTodo,
         filteredTodos,
