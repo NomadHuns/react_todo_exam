@@ -1,17 +1,25 @@
 // hooks/useTodos.ts
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import {Priority, Todo} from "../../../models/Todos";
 import {getKoreanISOString} from "../../../utils/FormatUtils";
 
 export const TodoListProvider = () => {
-    // 투두 요소들 배열 상태
-    const [todos, setTodos] = useState<Todo[]>([]);
+    // 투두 요소들 배열 상태(초기에 로컬스토리지로부터 저장된 값 받아옴)
+    const [todos, setTodos] = useState<Todo[]>(() => {
+        const stored = localStorage.getItem("todos");
+        return stored ? JSON.parse(stored) : [];
+    });
     // 새 투두 생성시 사용될 인풋값 상태
     const [input, setInput] = useState<string>("");
     // 새 투두 생성시 사용될 우선순위 셀렉트값 상태
     const [priority, setPriority] = useState<Priority>("medium");
     // 우선순위에 따른 필터링 기능 사용시 사용될 필터값 상태
     const [filter, setFilter] = useState<Priority | "all">("all");
+
+    // todos 상태 변경시 로컬스토리지에 저장
+    useEffect(() => {
+        localStorage.setItem("todos", JSON.stringify(todos));
+    }, [todos]);
 
     /*
         투두 추가 함수
@@ -76,7 +84,6 @@ export const TodoListProvider = () => {
         });
 
     return {
-        todos,
         input,
         priority,
         filter,
