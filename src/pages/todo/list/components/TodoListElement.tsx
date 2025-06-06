@@ -75,14 +75,17 @@ const TodoListElement: React.FC<TodoListElementProp> = ({ todo, toggleComplete, 
             {/* 상세 영역 */}
             {isOpen && (
                 <div style={styles.detailBox}>
-                    {/*TODO: 디자인 수정*/}
-                    <span style={{ margin: "8px 0", fontSize: 14 }}>
-                        우선 순위 :
-                        <MySelectBox
-                            value={todo.priority}
-                            onChange={(e) => setPriority(e)}
-                            options={PRIORITY_OPTIONS} />
-                    </span>
+                    <div style={styles.detailRow}>
+                        <div style={styles.detailLabel}>우선 순위</div>
+                        <div style={styles.detailInputBoxWrap}>
+                            <MySelectBox
+                                value={todo.priority}
+                                onChange={(e) => setPriority(e)}
+                                options={PRIORITY_OPTIONS}
+                                style={styles.select}
+                            />
+                        </div>
+                    </div>
                     <div style={styles.detailButtonWrap}>
                         <MyButton key={"update"} onClick={() => setOpenedId(null)} text="확인" />
                     </div>
@@ -93,10 +96,38 @@ const TodoListElement: React.FC<TodoListElementProp> = ({ todo, toggleComplete, 
 };
 
 const styles: Record<string, React.CSSProperties> = {
+    detailRow: {
+        display: "flex",
+        width: "100%",
+        padding: "8px 0",
+    },
+    detailLabel: {
+        width: "20%",
+        fontSize: 14,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "flex-start",
+        paddingRight: 12,
+        boxSizing: "border-box",
+    },
+    detailInputBoxWrap: {
+        width: "80%",
+    },
+    select: {
+        width: "100%",
+        padding: "8px 10px",
+        fontSize: "14px",
+        border: "1px solid #ccc",
+        borderRadius: 6,
+        backgroundColor: "#fff",
+        WebkitAppearance: "none" as const,
+        appearance: "none" as const,
+        boxSizing: "border-box",
+    },
     todoItem: {
         display: "flex",
         justifyContent: "space-between",
-        alignItems: "center", // 중요
+        alignItems: "center",
         padding: "6px 0",
         borderBottom: "1px solid #eee",
     },
@@ -104,8 +135,8 @@ const styles: Record<string, React.CSSProperties> = {
         display: "flex",
         alignItems: "center",
         flex: 1,
-        padding: "8px", // 클릭 범위 확보
-        cursor: "pointer", // 커서도 바꿔줘야 UX적으로 명확함
+        padding: "8px",
+        cursor: "pointer",
     },
     checkboxWrapper: {
         position: "relative",

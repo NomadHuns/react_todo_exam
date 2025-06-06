@@ -8,14 +8,15 @@ interface MySelectBoxProps {
     value: string;
     onChange: (value: string) => void;
     options: OptionItem[];
+    style?: React.CSSProperties;
 }
 
-const MySelectBox: React.FC<MySelectBoxProps> = ({ value, onChange, options }) => {
+const MySelectBox: React.FC<MySelectBoxProps> = ({ value, onChange, options, style }) => {
     return (
         <select
             value={value}
             onChange={(e) => onChange(e.target.value)}
-            style={styles.select}
+            style={style == null ? styles.select : style}
         >
             {options.map((o) => (
                 <option key={o.value} value={o.value}>
