@@ -52,17 +52,6 @@ export const TodoListProvider = () => {
         setTodos(todos.filter((todo) => todo.id !== id));
     };
 
-    const setPriorityByText = (text: string) => {
-        console.log(text);
-        if (text.trim() === "높음") {
-            setPriority("high");
-        } else if (text.trim() === "중간") {
-            setPriority("medium");
-        } else {
-            setPriority("low");
-        }
-    }
-
     /*
         투두 필터링 기능
     */

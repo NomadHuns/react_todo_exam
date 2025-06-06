@@ -16,19 +16,21 @@ const PRIORITY_LABELS: Record<Priority, string> = {
 
 const TodoListElement: React.FC<TodoListElementProp> = ({ todo, toggleComplete, deleteTodo }) => {
     return (
-        <li key={todo.id} style={styles.todoItem}>
-            <span
-                onClick={toggleComplete}
-                style={{
-                    textDecoration: todo.completed ? "line-through" : "none",
-                    opacity: todo.completed ? 0.6 : 1,
-                    cursor: "pointer",
-                }}
-            >
-              {PRIORITY_LABELS[todo.priority]} {todo.text}
-            </span>
-            <MyButton key={"delete"} onClick={deleteTodo}
-                      style={styles.delBtn} text={"삭제"} />
+        <li style={styles.todoItem}>
+            <div style={styles.leftWrap}>
+                <input type="checkbox" onClick={toggleComplete} checked={todo.completed} />
+                <span
+                    style={{
+                        textDecoration: todo.completed ? "line-through" : "none",
+                        opacity: todo.completed ? 0.6 : 1,
+                        cursor: "pointer",
+                        marginLeft: 8,
+                    }}
+                >
+                    {PRIORITY_LABELS[todo.priority]} {todo.text}
+                </span>
+            </div>
+            <MyButton key={"delete"} onClick={deleteTodo} style={styles.delBtn} text="삭제" />
         </li>
     );
 };
