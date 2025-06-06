@@ -40,7 +40,7 @@ const TodoListElement: React.FC<TodoListElementProp> = ({ todo, toggleComplete, 
                         <input
                             type="checkbox"
                             id={`checkbox-${todo.id}`}
-                            onClick={toggleComplete}
+                            onChange={toggleComplete}
                             checked={todo.completed}
                             style={styles.checkbox}
                         />
@@ -70,7 +70,7 @@ const TodoListElement: React.FC<TodoListElementProp> = ({ todo, toggleComplete, 
                 </div>
 
                 <div onClick={(e) => e.stopPropagation()}> {/* ✅ 삭제 버튼도 이벤트 분리 */}
-                    <MyButton key={"delete"} onClick={deleteTodo} style={styles.delBtn} text="삭제" />
+                    <MyButton onClick={deleteTodo} style={styles.delBtn} text="삭제" />
                 </div>
             </li>
             {/* 상세 영역 */}
@@ -94,7 +94,7 @@ const TodoListElement: React.FC<TodoListElementProp> = ({ todo, toggleComplete, 
                         </div>
                     </div>
                     <div style={styles.detailButtonWrap}>
-                        <MyButton key={"update"} onClick={() => setOpenedId(null)} text="확인" />
+                        <MyButton onClick={() => setOpenedId(null)} text="확인" />
                     </div>
                 </div>
             )}

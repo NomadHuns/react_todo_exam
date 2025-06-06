@@ -1,15 +1,14 @@
 import React from "react";
 
 interface MyButtonProps {
-    key: string;
     text: string;
     onClick: () => void; // 수정
     style?: React.CSSProperties;
 }
 
-const MyButton: React.FC<MyButtonProps> = ({ key, text, onClick, style }) => {
+const MyButton: React.FC<MyButtonProps> = ({ text, onClick, style }) => {
     return (
-        <button key={key} onClick={onClick} style={style == null ? styles.button : style}>
+        <button onClick={onClick} style={style == null ? styles.button : style}>
             {text}
         </button>
     );

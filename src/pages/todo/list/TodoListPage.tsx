@@ -37,12 +37,13 @@ const TodoListPage: React.FC = () => {
                     value={priority}
                     onChange={(e) => setPriority(e as Priority)}
                     options={PRIORITY_OPTIONS} />
-                <MyButton key={"add"} onClick={addTodo} text={"+ 추가"} />
+                <MyButton onClick={addTodo} text={"+ 추가"} />
             </div>
 
             <div style={styles.filterRow}>
                 {["all", ...PRIORITY_OPTIONS.map(value => value.value)].map((f) => (
-                    <MyButton key={f}
+                    <MyButton
+                              key={f}
                               onClick={() => {
                                   setFilter(f as Priority | "all");
                                   if (f !== "all") {
@@ -68,6 +69,7 @@ const TodoListPage: React.FC = () => {
             <ul style={styles.todoList}>
                 {filteredTodos.map((todo) => (
                     <TodoListElement
+                        key={todo.id}
                         todo={todo}
                         deleteTodo={() => deleteTodo(todo.id)}
                         toggleComplete={() => toggleComplete(todo.id)}
