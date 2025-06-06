@@ -4,22 +4,22 @@ export interface OptionItem {
     value: string;
     label: string;
 }
-interface PrioritySelectProps {
+interface MySelectBoxProps {
     value: string;
     onChange: (value: string) => void;
     options: OptionItem[];
 }
 
-const MySelectBox: React.FC<PrioritySelectProps> = ({ value, onChange, options }) => {
+const MySelectBox: React.FC<MySelectBoxProps> = ({ value, onChange, options }) => {
     return (
         <select
             value={value}
             onChange={(e) => onChange(e.target.value)}
             style={styles.select}
         >
-            {options.map((p) => (
-                <option key={p.value} value={p.value}>
-                    {p.label}
+            {options.map((o) => (
+                <option key={o.value} value={o.value}>
+                    {o.label}
                 </option>
             ))}
         </select>

@@ -1,0 +1,29 @@
+import React from "react";
+
+interface MyButtonProps {
+    key: string;
+    text: string;
+    onClick: () => void; // 수정
+    style?: React.CSSProperties;
+}
+
+const MyButton: React.FC<MyButtonProps> = ({ key, text, onClick, style }) => {
+    return (
+        <button key={key} onClick={onClick} style={style == null ? styles.button : style}>
+            {text}
+        </button>
+    );
+};
+
+const styles: Record<string, React.CSSProperties> = {
+    button: {
+        padding: "8px 12px",
+        backgroundColor: "#4f46e5",
+        color: "#fff",
+        border: "none",
+        borderRadius: 6,
+        cursor: "pointer",
+    },
+};
+
+export default MyButton;

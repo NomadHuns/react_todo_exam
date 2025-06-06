@@ -2,14 +2,11 @@ import React from "react";
 import {Priority} from "../../../models/Todos";
 import {TodoListProvider} from "./TodoListProvider";
 import MySelectBox, {OptionItem} from "../../../components/MySelectBox";
+import MyButton from "../../../components/MyButton";
+import MyTextInput from "../../../components/MyTextInput";
+import TodoListElement from "./components/TodoListElement";
 
 const PRIORITY_OPTIONS: OptionItem[] = [{value: "high", label:"높음"}, {value: "medium", label:"중간"}, {value: "low", label:"낮음"}];
-
-const PRIORITY_LABELS: Record<Priority, string> = {
-    high: "🔴",
-    medium: "🟡",
-    low: "🔵",
-};
 
 const TodoListPage: React.FC = () => {
     const {
@@ -27,66 +24,43 @@ const TodoListPage: React.FC = () => {
 
     return (
         <div style={styles.container}>
-            <h2>📝 MyTodoApp</h2>
+            <h2>TODO Exam</h2>
 
             <div style={styles.inputRow}>
-                <input
-                    type="text"
-                    placeholder="할 일을 입력하세요..."
-                    value={input}
-                    onChange={(e) => setInput(e.target.value)}
-                    style={styles.input}
+                <MyTextInput value={input} onChange={(e) => setInput(e)}
+                             placeholder={"할 일을 입력하세요."}
                 />
                 <MySelectBox
                     value={priority}
                     onChange={(e) => setPriority(e as Priority)}
                     options={PRIORITY_OPTIONS} />
-                <button onClick={addTodo} style={styles.button}>
-                    + 추가
-                </button>
+                <MyButton key={"add"} onClick={addTodo} text={"+ 추가"} />
             </div>
 
             <div style={styles.filterRow}>
                 {["all", ...PRIORITY_OPTIONS.map(value => value.value)].map((f) => (
-                    <button
-                        key={f}
-                        onClick={() => setFilter(f as Priority | "all")}
-                        style={{
-                            ...styles.filterBtn,
-                            fontWeight: filter === f ? "bold" : "normal",
-                        }}
-                    >
-                        {f === "all"
-                            ? "전체"
-                            : f === "high"
-                                ? "높음"
-                                : f === "medium"
-                                    ? "중간"
-                                    : "낮음"}
-                    </button>
+                    <MyButton key={f} onClick={() => setFilter(f as Priority | "all")}
+                              text={f === "all"
+                                    ? "전체"
+                                    : f === "high"
+                                        ? "높음"
+                                        : f === "medium"
+                                            ? "중간"
+                                            : "낮음"}
+                              style={{
+                                  ...styles.filterBtn,
+                                  fontWeight: filter === f ? "bold" : "normal",
+                              }}
+                    />
                 ))}
             </div>
 
             <ul style={styles.todoList}>
                 {filteredTodos.map((todo) => (
-                    <li key={todo.id} style={styles.todoItem}>
-            <span
-                onClick={() => toggleComplete(todo.id)}
-                style={{
-                    textDecoration: todo.completed ? "line-through" : "none",
-                    opacity: todo.completed ? 0.6 : 1,
-                    cursor: "pointer",
-                }}
-            >
-              {PRIORITY_LABELS[todo.priority]} {todo.text}
-            </span>
-                        <button
-                            onClick={() => deleteTodo(todo.id)}
-                            style={styles.delBtn}
-                        >
-                            삭제
-                        </button>
-                    </li>
+                    <TodoListElement todo={todo}
+                                     deleteTodo={() => deleteTodo(todo.id)}
+                                     toggleComplete={() => toggleComplete(todo.id)}
+                    />
                 ))}
             </ul>
         </div>
@@ -108,28 +82,6 @@ const styles: Record<string, React.CSSProperties> = {
         gap: 8,
         marginBottom: 12,
     },
-    input: {
-        flex: 1,
-        padding: 8,
-        fontSize: 14,
-    },
-    select: {
-        padding: "8px 10px",
-        fontSize: "14px",
-        border: "1px solid #ccc",
-        borderRadius: 6,
-        backgroundColor: "#fff",
-        WebkitAppearance: "none" as const,
-        appearance: "none" as const,
-    },
-    button: {
-        padding: "8px 12px",
-        backgroundColor: "#4f46e5",
-        color: "#fff",
-        border: "none",
-        borderRadius: 6,
-        cursor: "pointer",
-    },
     filterRow: {
         marginBottom: 12,
         display: "flex",
@@ -145,18 +97,6 @@ const styles: Record<string, React.CSSProperties> = {
     todoList: {
         listStyle: "none",
         padding: 0,
-    },
-    todoItem: {
-        display: "flex",
-        justifyContent: "space-between",
-        padding: "6px 0",
-        borderBottom: "1px solid #eee",
-    },
-    delBtn: {
-        background: "none",
-        border: "none",
-        color: "#ef4444",
-        cursor: "pointer",
     },
 };
 
