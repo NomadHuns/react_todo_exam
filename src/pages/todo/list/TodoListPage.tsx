@@ -57,9 +57,10 @@ const TodoListPage: React.FC = () => {
 
             <ul style={styles.todoList}>
                 {filteredTodos.map((todo) => (
-                    <TodoListElement todo={todo}
-                                     deleteTodo={() => deleteTodo(todo.id)}
-                                     toggleComplete={() => toggleComplete(todo.id)}
+                    <TodoListElement
+                        todo={todo}
+                        deleteTodo={() => deleteTodo(todo.id)}
+                        toggleComplete={() => toggleComplete(todo.id)}
                     />
                 ))}
             </ul>

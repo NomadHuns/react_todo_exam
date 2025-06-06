@@ -1,5 +1,5 @@
 import {Priority, Todo} from "../../../../models/Todos";
-import React from "react";
+import React, {useState} from "react";
 import MyButton from "../../../../components/MyButton";
 
 interface TodoListElementProp {
@@ -15,32 +15,60 @@ const PRIORITY_LABELS: Record<Priority, string> = {
 };
 
 const TodoListElement: React.FC<TodoListElementProp> = ({ todo, toggleComplete, deleteTodo }) => {
+    const [isOpen, setIsOpen] = useState(false);
+
+    const handleToggleDetail = () => {
+        setIsOpen(prev => !prev);
+    };
+
     return (
-        <li style={styles.todoItem}>
-            <div style={styles.leftWrap}>
-                <div style={styles.checkboxWrapper}>
-                    <input
-                        type="checkbox"
-                        id={`checkbox-${todo.id}`}
-                        onClick={toggleComplete}
-                        checked={todo.completed}
-                        style={styles.checkbox}
-                    />
-                    <label htmlFor={`checkbox-${todo.id}`} style={styles.customCheckbox}>
-                        {todo.completed && <div style={styles.checkMark} />}
-                    </label>
+        <>
+            <li style={styles.todoItem}>
+                <div
+                    style={styles.leftWrap}
+                    onClick={handleToggleDetail} // ✅ 왼쪽 전체를 클릭 가능하게
+                >
+                    <div
+                        style={styles.checkboxWrapper}
+                        onClick={(e) => e.stopPropagation()} // ✅ 체크박스 클릭 시 이벤트 전파 막기
+                    >
+                        <input
+                            type="checkbox"
+                            id={`checkbox-${todo.id}`}
+                            onClick={toggleComplete}
+                            checked={todo.completed}
+                            style={styles.checkbox}
+                        />
+                        <label htmlFor={`checkbox-${todo.id}`} style={styles.customCheckbox}>
+                            {todo.completed && <div style={styles.checkMark} />}
+                        </label>
+                    </div>
+
+                    <span
+                        style={{
+                            textDecoration: todo.completed ? "line-through" : "none",
+                            opacity: todo.completed ? 0.6 : 1,
+                            cursor: "pointer",
+                            marginLeft: 8,
+                        }}
+                    >
+                        {PRIORITY_LABELS[todo.priority]} {todo.text}
+                    </span>
                 </div>
-                <span style={{
-                    textDecoration: todo.completed ? "line-through" : "none",
-                    opacity: todo.completed ? 0.6 : 1,
-                    cursor: "pointer",
-                    marginLeft: 8,
-                }}>
-            {PRIORITY_LABELS[todo.priority]} {todo.text}
-        </span>
-            </div>
-            <MyButton key={"delete"} onClick={deleteTodo} style={styles.delBtn} text="삭제" />
-        </li>
+
+                <div onClick={(e) => e.stopPropagation()}> {/* ✅ 삭제 버튼도 이벤트 분리 */}
+                    <MyButton key={"delete"} onClick={deleteTodo} style={styles.delBtn} text="삭제" />
+                </div>
+            </li>
+            {/* 상세 영역 */}
+            {isOpen && (
+                <div style={styles.detailBox}>
+                    <p style={{ margin: "8px 0", fontSize: 14 }}>
+                        ID: {todo.id}
+                    </p>
+                </div>
+            )}
+        </>
     );
 };
 
@@ -54,7 +82,10 @@ const styles: Record<string, React.CSSProperties> = {
     },
     leftWrap: {
         display: "flex",
-        alignItems: "center", // 체크박스와 텍스트 수직 정렬 맞춤
+        alignItems: "center",
+        flex: 1,
+        padding: "8px", // 클릭 범위 확보
+        cursor: "pointer", // 커서도 바꿔줘야 UX적으로 명확함
     },
     checkboxWrapper: {
         position: "relative",
@@ -100,6 +131,13 @@ const styles: Record<string, React.CSSProperties> = {
         border: "none",
         color: "#ef4444",
         cursor: "pointer",
+    },
+    detailBox: {
+        padding: "8px 12px",
+        backgroundColor: "#f9f9f9",
+        borderBottom: "1px solid #ddd",
+        fontSize: "14px",
+        color: "#333",
     },
 };
 
