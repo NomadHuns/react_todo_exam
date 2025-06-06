@@ -2,12 +2,16 @@ import {Priority, Todo} from "../../../../models/Todos";
 import React, {useState} from "react";
 import MyButton from "../../../../components/MyButton";
 import MyTextInput from "../../../../components/MyTextInput";
+import MySelectBox, {OptionItem} from "../../../../components/MySelectBox";
+
+const PRIORITY_OPTIONS: OptionItem[] = [{value: "high", label:"높음"}, {value: "medium", label:"중간"}, {value: "low", label:"낮음"}];
 
 interface TodoListElementProp {
     todo: Todo;
     toggleComplete: () => void;
     deleteTodo: () => void;
     changeText: (value: string) => void;
+    setPriority: (value: string) => void;
 }
 
 const PRIORITY_LABELS: Record<Priority, string> = {
@@ -16,7 +20,7 @@ const PRIORITY_LABELS: Record<Priority, string> = {
     low: "🔵",
 };
 
-const TodoListElement: React.FC<TodoListElementProp> = ({ todo, toggleComplete, deleteTodo, changeText }) => {
+const TodoListElement: React.FC<TodoListElementProp> = ({ todo, toggleComplete, deleteTodo, changeText, setPriority }) => {
     const [isOpen, setIsOpen] = useState(false);
 
     const handleToggleDetail = () => {
@@ -28,7 +32,7 @@ const TodoListElement: React.FC<TodoListElementProp> = ({ todo, toggleComplete, 
             <li style={styles.todoItem}>
                 <div
                     style={styles.leftWrap}
-                    onClick={handleToggleDetail} // ✅ 왼쪽 전체를 클릭 가능하게
+                    onClick={() => setIsOpen(prev => true)} // ✅ 왼쪽 전체를 클릭 가능하게
                 >
                     <div
                         style={styles.checkboxWrapper}
@@ -73,9 +77,16 @@ const TodoListElement: React.FC<TodoListElementProp> = ({ todo, toggleComplete, 
             {/* 상세 영역 */}
             {isOpen && (
                 <div style={styles.detailBox}>
-                    <p style={{ margin: "8px 0", fontSize: 14 }}>
-                        ID: {todo.id}
-                    </p>
+                    <span style={{ margin: "8px 0", fontSize: 14 }}>
+                        우선 순위 :
+                        <MySelectBox
+                            value={todo.priority}
+                            onChange={(e) => setPriority(e)}
+                            options={PRIORITY_OPTIONS} />
+                    </span>
+                    <div style={styles.detailButtonWrap}>
+                        <MyButton key={"update"} onClick={() => setIsOpen(false)} text="확인" />
+                    </div>
                 </div>
             )}
         </>
@@ -149,6 +160,11 @@ const styles: Record<string, React.CSSProperties> = {
         fontSize: "14px",
         color: "#333",
     },
+    detailButtonWrap: {
+        display: "flex",
+        justifyContent: "center",
+        marginTop: 12,
+    }
 };
 
 export default TodoListElement;

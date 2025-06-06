@@ -63,6 +63,7 @@ const TodoListPage: React.FC = () => {
                         deleteTodo={() => deleteTodo(todo.id)}
                         toggleComplete={() => toggleComplete(todo.id)}
                         changeText={(e) => putTodo({text: e, id: todo.id, priority: todo.priority, completed: todo.completed})}
+                        setPriority={(e) => putTodo({text: todo.text, id: todo.id, priority: e as Priority, completed: todo.completed})}
                     />
                 ))}
             </ul>
