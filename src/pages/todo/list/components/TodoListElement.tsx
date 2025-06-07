@@ -70,7 +70,12 @@ const TodoListElement: React.FC<TodoListElementProp> = ({ todo, toggleComplete, 
                 </div>
 
                 <div onClick={(e) => e.stopPropagation()}> {/* ✅ 삭제 버튼도 이벤트 분리 */}
-                    <MyButton onClick={deleteTodo} style={styles.delBtn} text="삭제" />
+                    <MyButton onClick={() => {
+                                    if (window.confirm("해당 할일을 삭제하시겠습니까?")) {
+                                        deleteTodo();
+                                    }
+                                }}
+                              style={styles.delBtn} text="삭제" />
                 </div>
             </li>
             {/* 상세 영역 */}
