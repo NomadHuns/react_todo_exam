@@ -59,10 +59,15 @@ const TodoListElement: React.FC<TodoListElementProp> = ({ todo, toggleComplete, 
                     {!isOpen && (
                         <span
                             style={{
+                                flex: 1,
                                 textDecoration: todo.completed ? "line-through" : "none",
                                 opacity: todo.completed ? 0.6 : 1,
                                 cursor: "pointer",
                                 marginLeft: 8,
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                                whiteSpace: "nowrap",
+                                display: "inline-block",
                             }}
                         >
                             {PRIORITY_LABELS[todo.priority]} {todo.text}
@@ -152,6 +157,8 @@ const styles: Record<string, React.CSSProperties> = {
     },
     leftWrap: {
         display: "flex",
+        minWidth: 0,
+        gap: 8,
         alignItems: "center",
         flex: 1,
         padding: "8px",
