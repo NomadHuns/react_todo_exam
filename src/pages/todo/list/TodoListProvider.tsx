@@ -72,11 +72,17 @@ export const TodoListProvider = () => {
         투두 필터링 기능
     */
     const filteredTodos = todos
-        .filter((todo) => filter === "all" || todo.priority === filter)
+        .filter((todo) => {
+            if (filter === "all") return true;
+            if (filter === "completed") return todo.completed;
+            if (filter === "incomplete") return !todo.completed;
+            return todo.priority === filter;
+        })
         .sort((a, b) => {
             const order: Record<Priority, number> = { high: 0, medium: 1, low: 2 };
             return order[a.priority] - order[b.priority];
         });
+
 
     return {
         input,

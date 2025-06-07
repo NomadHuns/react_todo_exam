@@ -41,27 +41,33 @@ const TodoListPage: React.FC = () => {
             </div>
 
             <div style={styles.filterRow}>
-                {["all", ...PRIORITY_OPTIONS.map(value => value.value)].map((f) => (
+                {["all", "completed", "incomplete", ...PRIORITY_OPTIONS.map(value => value.value)].map((f) => (
                     <MyButton
-                              key={f}
-                              onClick={() => {
-                                  setFilter(f as Priority | "all");
-                                  if (f !== "all") {
-                                      setPriority(f as Priority);
-                                  }
-                                  setOpenedId(null);
-                              }}
-                              text={f === "all"
-                                    ? "전체"
-                                    : f === "high"
-                                        ? "높음"
-                                        : f === "medium"
-                                            ? "중간"
-                                            : "낮음"}
-                              style={{
-                                  ...styles.filterBtn,
-                                  fontWeight: filter === f ? "bold" : "normal",
-                              }}
+                        key={f}
+                        onClick={() => {
+                            setFilter(f as Priority | "all" | "completed" | "incomplete");
+                            if (f !== "all" && f !== "completed" && f !== "incomplete") {
+                                setPriority(f as Priority);
+                            }
+                            setOpenedId(null);
+                        }}
+                        text={
+                            f === "all"
+                                ? "전체"
+                                : f === "completed"
+                                    ? "완료됨"
+                                    : f === "incomplete"
+                                        ? "미완료"
+                                        : f === "high"
+                                            ? "높음"
+                                            : f === "medium"
+                                                ? "중간"
+                                                : "낮음"
+                        }
+                        style={{
+                            ...styles.filterBtn,
+                            fontWeight: filter === f ? "bold" : "normal",
+                        }}
                     />
                 ))}
             </div>
@@ -104,7 +110,8 @@ const styles: Record<string, React.CSSProperties> = {
     filterRow: {
         marginBottom: 12,
         display: "flex",
-        gap: 6,
+        gap: 7,
+        flexWrap: "wrap",
     },
     filterBtn: {
         padding: "4px 10px",

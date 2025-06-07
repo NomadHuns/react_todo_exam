@@ -27,7 +27,7 @@ export const todoPriorityState = atom<Priority>({
 });
 
 // 필터 상태 (우선순위별 보기용)
-export const todoFilterState = atom<Priority | "all">({
+export const todoFilterState = atom<Priority | "all" | "completed" | "incomplete">({
     key: "todoFilterState",
     default: "all",
 });
