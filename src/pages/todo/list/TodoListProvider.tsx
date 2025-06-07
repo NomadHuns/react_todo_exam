@@ -3,7 +3,7 @@ import {Priority, Todo} from "../../../models/Todos";
 import {getKoreanISOString} from "../../../utils/FormatUtils";
 import {useRecoilState} from "recoil";
 import {todoFilterState, todoInputState, todoListState, todoPriorityState} from "./TodoListAtom";
-import React, {useEffect} from "react";
+import {useEffect} from "react";
 
 export const TodoListProvider = () => {
     const [todos, setTodos] = useRecoilState(todoListState);
@@ -29,6 +29,7 @@ export const TodoListProvider = () => {
             text: input,
             completed: false,
             priority,
+            expiredAt: undefined,
             createdAt: getKoreanISOString(),
         };
         // 기존 투두 리스트의 앞에 새로 인스턴스된 객체를 깊은 복사 형태로 생성하여 상태 변경

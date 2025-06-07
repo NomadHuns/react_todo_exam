@@ -6,5 +6,6 @@ export interface Todo {
     text: string;
     completed: boolean;
     priority: Priority;
+    expiredAt: string | undefined;
     createdAt: string;
 }

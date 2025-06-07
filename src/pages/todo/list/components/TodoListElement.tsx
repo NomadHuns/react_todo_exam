@@ -15,6 +15,7 @@ interface TodoListElementProp {
     setPriority: (value: string) => void;
     openedId: number | null;
     setOpenedId: (id: number | null) => void;
+    setExpiredAt: (value: string) => void;
 }
 
 const PRIORITY_LABELS: Record<Priority, string> = {
@@ -23,7 +24,7 @@ const PRIORITY_LABELS: Record<Priority, string> = {
     low: "🔵",
 };
 
-const TodoListElement: React.FC<TodoListElementProp> = ({ todo, toggleComplete, deleteTodo, changeText, setPriority, openedId, setOpenedId }) => {
+const TodoListElement: React.FC<TodoListElementProp> = ({ todo, toggleComplete, deleteTodo, changeText, setPriority, openedId, setOpenedId, setExpiredAt }) => {
     const isOpen = openedId === todo.id;
 
     return (
@@ -90,6 +91,12 @@ const TodoListElement: React.FC<TodoListElementProp> = ({ todo, toggleComplete, 
                                 options={PRIORITY_OPTIONS}
                                 style={styles.select}
                             />
+                        </div>
+                    </div>
+                    <div style={styles.detailRow}>
+                        <div style={styles.detailLabel}>기한</div>
+                        <div style={styles.detailInputBoxWrap}>
+                            <input type={"datetime-local"} value={todo.expiredAt} onChange={(e) => setExpiredAt(e.target.value)}/>
                         </div>
                     </div>
                     <div style={styles.detailRow}>
