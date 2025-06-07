@@ -32,6 +32,7 @@ export const TodoListProvider = () => {
             priority,
             expiredAt: undefined,
             createdAt: getKoreanISOString(),
+            tags: selectedTag !== "" ? [selectedTag] : []
         };
         // 기존 투두 리스트의 앞에 새로 인스턴스된 객체를 깊은 복사 형태로 생성하여 상태 변경
         setTodos([newTodo, ...todos]);

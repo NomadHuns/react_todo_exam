@@ -82,14 +82,20 @@ const TodoListPage: React.FC = () => {
                     key={"전체"}
                     tag={"전체"}
                     selected={selectedTag === ""}
-                    onClick={() => setSelectedTag("")}
+                    onClick={() => {
+                        setSelectedTag("");
+                        setOpenedId(null);
+                    }}
                 />
                 {uniqueTags.map((tag) => (
                     <MyTagButton
                         key={tag}
                         tag={tag}
                         selected={selectedTag === tag}
-                        onClick={() => setSelectedTag(tag)}
+                        onClick={() => {
+                            setSelectedTag(tag);
+                            setOpenedId(null);
+                        }}
                     />
                 ))}
             </div>
