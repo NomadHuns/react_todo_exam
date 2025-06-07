@@ -17,7 +17,7 @@ export const TodoListProvider = () => {
     }, [todos]);
 
     /*
-        투두 추가 함수
+        할일 추가 함수
     */
     const addTodo = () => {
         // 인풋 값이 공백이거나 없을 경우 함수 종료
@@ -39,7 +39,7 @@ export const TodoListProvider = () => {
     };
 
     /*
-        투두 요소 수정 함수
+        할일 요소 수정 함수
      */
     const putTodo = (updatedTodo: Todo) => {
         setTodos((prevTodos) =>
@@ -50,7 +50,7 @@ export const TodoListProvider = () => {
     };
 
     /*
-        투두 요소 완료 토글 함수
+        할일 요소 완료 토글 함수
     */
     const toggleComplete = (id: number) => {
         // 선택된 id 의 투두의 completed 필드값을 수정하여 상태 변경
@@ -62,7 +62,7 @@ export const TodoListProvider = () => {
     };
 
     /*
-        투두 요소 삭제
+        할일 요소 삭제
     */
     const deleteTodo = (id: number) => {
         // 선택된 id 의 투두를 배열에서 삭재 후 상태 변경
@@ -70,7 +70,7 @@ export const TodoListProvider = () => {
     };
 
     /*
-        투두 필터링 기능
+        할일 필터링 기능
     */
     const filteredTodos = todos
         .filter((todo) => {
@@ -83,6 +83,29 @@ export const TodoListProvider = () => {
             const order: Record<Priority, number> = { high: 0, medium: 1, low: 2 };
             return order[a.priority] - order[b.priority];
         });
+
+    const saveTag = (id: number, tag: string) => {
+        setTodos((prevTodos) =>
+            prevTodos.map((todo) =>
+                todo.id === id ? {...todo,
+                        tags: todo.tags
+                            ? todo.tags.includes(tag)
+                                ? todo.tags
+                                : [...todo.tags, tag]
+                            : [tag]} : todo
+            )
+        );
+    };
+
+    const deleteTag = (id: number, tag: string) => {
+        setTodos((prevTodos) =>
+            prevTodos.map((todo) =>
+                todo.id === id ? {
+                        ...todo,
+                        tags: todo.tags?.filter((t) => t !== tag)} : todo
+            )
+        );
+    };
 
 
     return {
@@ -97,5 +120,7 @@ export const TodoListProvider = () => {
         toggleComplete,
         deleteTodo,
         filteredTodos,
+        saveTag,
+        deleteTag
     };
 };

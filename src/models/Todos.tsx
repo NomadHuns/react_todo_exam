@@ -8,4 +8,5 @@ export interface Todo {
     priority: Priority;
     expiredAt: string | undefined;
     createdAt: string;
+    tags?: string[];
 }

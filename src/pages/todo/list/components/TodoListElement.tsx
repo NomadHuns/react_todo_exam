@@ -1,5 +1,5 @@
 import {Priority, Todo} from "../../../../models/Todos";
-import React from "react";
+import React, {useState} from "react";
 import MyButton from "../../../../components/MyButton";
 import MyTextInput from "../../../../components/MyTextInput";
 import MySelectBox, {OptionItem} from "../../../../components/MySelectBox";
@@ -16,6 +16,8 @@ interface TodoListElementProp {
     openedId: number | null;
     setOpenedId: (id: number | null) => void;
     setExpiredAt: (value: string) => void;
+    saveTag: (value: string) => void;
+    deleteTag: (value: string) => void;
 }
 
 const PRIORITY_LABELS: Record<Priority, string> = {
@@ -24,8 +26,9 @@ const PRIORITY_LABELS: Record<Priority, string> = {
     low: "🔵",
 };
 
-const TodoListElement: React.FC<TodoListElementProp> = ({ todo, toggleComplete, deleteTodo, changeText, setPriority, openedId, setOpenedId, setExpiredAt }) => {
+const TodoListElement: React.FC<TodoListElementProp> = ({ todo, toggleComplete, deleteTodo, changeText, setPriority, openedId, setOpenedId, setExpiredAt, saveTag, deleteTag }) => {
     const isOpen = openedId === todo.id;
+    const [tagValue, setTagValue] = useState<string>("");
 
     return (
         <>
@@ -73,22 +76,20 @@ const TodoListElement: React.FC<TodoListElementProp> = ({ todo, toggleComplete, 
                             {PRIORITY_LABELS[todo.priority]} {todo.text}
                         </span>
                     )}
-                    {!isOpen && (
-                        <span
-                            style={{
-                                opacity: todo.completed ? 0.6 : 1,
-                                cursor: "pointer",
-                                marginLeft: 8,
-                                overflow: "hidden",
-                                textOverflow: "ellipsis",
-                                whiteSpace: "nowrap",
-                                display: "inline-block",
-                                fontWeight: "bold"
-                            }}
-                        >
-                            {getRelativeDayLabel(todo.expiredAt)}
-                        </span>
-                    )}
+                    <span
+                        style={{
+                            opacity: todo.completed ? 0.6 : 1,
+                            cursor: "pointer",
+                            marginLeft: 8,
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                            whiteSpace: "nowrap",
+                            display: "inline-block",
+                            fontWeight: "bold"
+                        }}
+                    >
+                        {getRelativeDayLabel(todo.expiredAt)}
+                    </span>
                 </div>
 
                 <div onClick={(e) => e.stopPropagation()}> {/* ✅ 삭제 버튼도 이벤트 분리 */}
@@ -117,7 +118,55 @@ const TodoListElement: React.FC<TodoListElementProp> = ({ todo, toggleComplete, 
                     <div style={styles.detailRow}>
                         <div style={styles.detailLabel}>기한</div>
                         <div style={styles.detailInputBoxWrap}>
-                            <input type={"date"} value={todo.expiredAt} onChange={(e) => setExpiredAt(e.target.value)}/>
+                            <input
+                                type="date"
+                                value={todo.expiredAt}
+                                onChange={(e) => setExpiredAt(e.target.value)}
+                                style={{
+                                    padding: "8px 12px",
+                                    fontSize: "14px",
+                                    borderRadius: "8px",
+                                    border: "1px solid #d1d5db",
+                                    backgroundColor: "#fff",
+                                    color: "#111827",
+                                    outline: "none",
+                                    transition: "border-color 0.2s ease",
+                                    appearance: "none",
+                                    WebkitAppearance: "none",
+                                    MozAppearance: "none",
+                                }}
+                            />
+                        </div>
+                    </div>
+                    <div style={styles.detailRow}>
+                        <div style={styles.detailLabel}>태그</div>
+                        <div style={styles.detailInputBoxWrap}>
+                            <div style={styles.tagListWrap}>
+                                {todo.tags?.map((tag) => (
+                                    <span key={tag} style={styles.tagItem}>
+                                       {tag}
+                                        <button
+                                            onClick={() => deleteTag(tag)}
+                                            style={styles.tagDeleteBtn}
+                                        >
+                                            ×
+                                        </button>
+                                    </span>
+                                ))}
+                            </div>
+                            <MyTextInput
+                                value={tagValue}
+                                onChange={(e) => setTagValue(e)}
+                                onKeyDown={(e) => {
+                                    if ((e.key === "Enter" || e.key === " ") && tagValue.trim().length > 1) {
+                                        e.preventDefault();
+                                        saveTag(tagValue.trim());
+                                        setTimeout(() => setTagValue(""), 10);
+                                    }
+                                }}
+                                placeholder={"ex) 공부"}
+                                style={styles.input}
+                            />
                         </div>
                     </div>
                     <div style={styles.detailRow}>
@@ -236,7 +285,47 @@ const styles: Record<string, React.CSSProperties> = {
         display: "flex",
         justifyContent: "center",
         marginTop: 12,
-    }
+    },
+    tagListWrap: {
+        display: "flex",
+        flexWrap: "wrap",
+        gap: "6px",
+        marginBottom: "8px",
+        alignItems: "center",
+    },
+    tagItem: {
+        backgroundColor: "#e0e7ff",
+        color: "#1e40af",
+        padding: "6px 10px",
+        borderRadius: "9999px",
+        fontSize: "13px",
+        display: "flex",
+        alignItems: "center",
+        gap: "6px",
+        fontWeight: 500,
+        maxWidth: "100%",
+    },
+    tagDeleteBtn: {
+        border: "none",
+        background: "transparent",
+        color: "#64748b",
+        fontSize: "14px",
+        cursor: "pointer",
+        lineHeight: 1,
+        padding: 0,
+        margin: 0,
+        transition: "color 0.2s ease",
+    },
+    input: {
+        flex: 1,
+        padding: "8px 12px",
+        fontSize: "14px",
+        borderRadius: "9999px",
+        border: "1px solid #d1d5db",
+        outline: "none",
+        backgroundColor: "#fff",
+        transition: "border-color 0.2s ease",
+    },
 };
 
 export default TodoListElement;

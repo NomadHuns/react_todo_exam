@@ -21,6 +21,8 @@ const TodoListPage: React.FC = () => {
         deleteTodo,
         toggleComplete,
         filteredTodos,
+        saveTag,
+        deleteTag
     } = TodoListProvider();
 
     const [openedId, setOpenedId] = useState<number | null>(null);
@@ -87,6 +89,8 @@ const TodoListPage: React.FC = () => {
                         setOpenedId={setOpenedId}
                         setExpiredAt={(e) => putTodo({text: todo.text, id: todo.id,
                             priority: todo.priority, completed: todo.completed, expiredAt: e,  createdAt: todo.createdAt})}
+                        saveTag={(e) => saveTag(todo.id, e)}
+                        deleteTag={(e) => deleteTag(todo.id, e)}
                     />
                 ))}
             </ul>

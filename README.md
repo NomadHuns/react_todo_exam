@@ -67,3 +67,16 @@
     rm -rf node_modules package-lock.json
     npm install
 ```
+
+### 태그 생성시 한글자 남음 문제
+- 문제 발생 이유: 한글 조합 입력(IME: Input Method Editor)을 처리할 때 발생하는 문제
+- 해결 방법
+```ts
+    onKeyDown={(e) => {
+    if ((e.key === "Enter" || e.key === " ") && tagValue.trim().length > 1) {
+        e.preventDefault();
+        saveTag(tagValue.trim());
+        setTimeout(() => setTagValue(""), 10); // 해당 부분 짧은 딜레이로 처리
+    }
+}}
+```

@@ -4,17 +4,20 @@ interface MyTextInputProps {
     placeholder: string;
     value: string;
     onChange: (value: string) => void;
+    onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
     autoFocus? : boolean;
+    style?: React.CSSProperties;
 }
 
-const MyTextInput: React.FC<MyTextInputProps> = ({ placeholder, value, onChange, autoFocus }) => {
+const MyTextInput: React.FC<MyTextInputProps> = ({ placeholder, value, onChange, onKeyDown, autoFocus, style }) => {
     return (
         <input
             type="text"
             placeholder={placeholder}
             value={value}
             onChange={(e) => onChange(e.target.value)}
-            style={styles.input}
+            onKeyDown={onKeyDown}
+            style={style == null ? styles.input : style}
             autoFocus={autoFocus}
         />
     );
