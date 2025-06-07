@@ -3,7 +3,7 @@ import React from "react";
 import MyButton from "../../../../components/MyButton";
 import MyTextInput from "../../../../components/MyTextInput";
 import MySelectBox, {OptionItem} from "../../../../components/MySelectBox";
-import {formatKoreanDate} from "../../../../utils/FormatUtils";
+import {formatKoreanDate, getRelativeDayLabel} from "../../../../utils/FormatUtils";
 
 const PRIORITY_OPTIONS: OptionItem[] = [{value: "high", label:"높음"}, {value: "medium", label:"중간"}, {value: "low", label:"낮음"}];
 
@@ -73,6 +73,22 @@ const TodoListElement: React.FC<TodoListElementProp> = ({ todo, toggleComplete, 
                             {PRIORITY_LABELS[todo.priority]} {todo.text}
                         </span>
                     )}
+                    {!isOpen && (
+                        <span
+                            style={{
+                                opacity: todo.completed ? 0.6 : 1,
+                                cursor: "pointer",
+                                marginLeft: 8,
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                                whiteSpace: "nowrap",
+                                display: "inline-block",
+                                fontWeight: "bold"
+                            }}
+                        >
+                            {getRelativeDayLabel(todo.expiredAt)}
+                        </span>
+                    )}
                 </div>
 
                 <div onClick={(e) => e.stopPropagation()}> {/* ✅ 삭제 버튼도 이벤트 분리 */}
@@ -101,7 +117,7 @@ const TodoListElement: React.FC<TodoListElementProp> = ({ todo, toggleComplete, 
                     <div style={styles.detailRow}>
                         <div style={styles.detailLabel}>기한</div>
                         <div style={styles.detailInputBoxWrap}>
-                            <input type={"datetime-local"} value={todo.expiredAt} onChange={(e) => setExpiredAt(e.target.value)}/>
+                            <input type={"date"} value={todo.expiredAt} onChange={(e) => setExpiredAt(e.target.value)}/>
                         </div>
                     </div>
                     <div style={styles.detailRow}>
