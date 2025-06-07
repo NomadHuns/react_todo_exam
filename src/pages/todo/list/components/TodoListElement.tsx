@@ -4,6 +4,7 @@ import MyButton from "../../../../components/MyButton";
 import MyTextInput from "../../../../components/MyTextInput";
 import MySelectBox, {OptionItem} from "../../../../components/MySelectBox";
 import {formatKoreanDate, getRelativeDayLabel} from "../../../../utils/FormatUtils";
+import MyTagButton from "../../../../components/MyTagButton";
 
 const PRIORITY_OPTIONS: OptionItem[] = [{value: "high", label:"높음"}, {value: "medium", label:"중간"}, {value: "low", label:"낮음"}];
 
@@ -143,15 +144,7 @@ const TodoListElement: React.FC<TodoListElementProp> = ({ todo, toggleComplete, 
                         <div style={styles.detailInputBoxWrap}>
                             <div style={styles.tagListWrap}>
                                 {todo.tags?.map((tag) => (
-                                    <span key={tag} style={styles.tagItem}>
-                                       {tag}
-                                        <button
-                                            onClick={() => deleteTag(tag)}
-                                            style={styles.tagDeleteBtn}
-                                        >
-                                            ×
-                                        </button>
-                                    </span>
+                                    <MyTagButton deleteTag={() => deleteTag(tag)} tag={tag}/>
                                 ))}
                             </div>
                             <MyTextInput
