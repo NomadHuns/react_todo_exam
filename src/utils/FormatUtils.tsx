@@ -12,6 +12,7 @@ export function formatKoreanDate(isoString: string): string {
 
 export function getRelativeDayLabel(dateString: string | undefined): string {
     if (typeof dateString != "string") return "";
+    if (dateString.trim() === "") return "";
 
     const inputDate = new Date(dateString);
     const now = new Date();
