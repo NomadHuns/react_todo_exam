@@ -159,6 +159,7 @@ const TodoListElement: React.FC<TodoListElementProp> = ({ todo, toggleComplete, 
                                 }}
                                 placeholder={"ex) 공부"}
                                 style={styles.input}
+                                maxLength={10}
                             />
                         </div>
                     </div>

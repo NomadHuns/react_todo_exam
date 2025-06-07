@@ -5,6 +5,7 @@ import MySelectBox, {OptionItem} from "../../../components/MySelectBox";
 import MyButton from "../../../components/MyButton";
 import MyTextInput from "../../../components/MyTextInput";
 import TodoListElement from "./components/TodoListElement";
+import MyTagButton from "../../../components/MyTagButton";
 
 const PRIORITY_OPTIONS: OptionItem[] = [{value: "high", label:"높음"}, {value: "medium", label:"중간"}, {value: "low", label:"낮음"}];
 
@@ -22,7 +23,10 @@ const TodoListPage: React.FC = () => {
         toggleComplete,
         filteredTodos,
         saveTag,
-        deleteTag
+        deleteTag,
+        uniqueTags,
+        selectedTag,
+        setSelectedTag
     } = TodoListProvider();
 
     const [openedId, setOpenedId] = useState<number | null>(null);
@@ -70,6 +74,22 @@ const TodoListPage: React.FC = () => {
                             ...styles.filterBtn,
                             fontWeight: filter === f ? "bold" : "normal",
                         }}
+                    />
+                ))}
+            </div>
+            <div style={styles.filterRow}>
+                <MyTagButton
+                    key={"전체"}
+                    tag={"전체"}
+                    selected={selectedTag === ""}
+                    onClick={() => setSelectedTag("")}
+                />
+                {uniqueTags.map((tag) => (
+                    <MyTagButton
+                        key={tag}
+                        tag={tag}
+                        selected={selectedTag === tag}
+                        onClick={() => setSelectedTag(tag)}
                     />
                 ))}
             </div>

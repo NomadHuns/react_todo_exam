@@ -7,9 +7,10 @@ interface MyTextInputProps {
     onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
     autoFocus? : boolean;
     style?: React.CSSProperties;
+    maxLength?: number;
 }
 
-const MyTextInput: React.FC<MyTextInputProps> = ({ placeholder, value, onChange, onKeyDown, autoFocus, style }) => {
+const MyTextInput: React.FC<MyTextInputProps> = ({ placeholder, value, onChange, onKeyDown, autoFocus, style, maxLength }) => {
     return (
         <input
             type="text"
@@ -19,6 +20,7 @@ const MyTextInput: React.FC<MyTextInputProps> = ({ placeholder, value, onChange,
             onKeyDown={onKeyDown}
             style={style == null ? styles.input : style}
             autoFocus={autoFocus}
+            maxLength={maxLength}
         />
     );
 };

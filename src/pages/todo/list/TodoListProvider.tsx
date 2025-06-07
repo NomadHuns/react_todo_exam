@@ -2,7 +2,7 @@
 import {Priority, Todo} from "../../../models/Todos";
 import {getKoreanISOString} from "../../../utils/FormatUtils";
 import {useRecoilState} from "recoil";
-import {todoFilterState, todoInputState, todoListState, todoPriorityState} from "./TodoListAtom";
+import {selectedTagState, todoFilterState, todoInputState, todoListState, todoPriorityState} from "./TodoListAtom";
 import {useEffect} from "react";
 
 export const TodoListProvider = () => {
@@ -10,6 +10,7 @@ export const TodoListProvider = () => {
     const [input, setInput] = useRecoilState(todoInputState);
     const [priority, setPriority] = useRecoilState(todoPriorityState);
     const [filter, setFilter] = useRecoilState(todoFilterState);
+    const [selectedTag, setSelectedTag] = useRecoilState(selectedTagState);
 
     // todos 상태 변경시 로컬스토리지에 저장
     useEffect(() => {
@@ -79,6 +80,11 @@ export const TodoListProvider = () => {
             if (filter === "incomplete") return !todo.completed;
             return todo.priority === filter;
         })
+        .filter((todo) => {
+            // 2차 필터: 선택된 태그가 있다면 해당 태그를 포함하는 todo만
+            if (!selectedTag) return true;
+            return todo.tags?.includes(selectedTag);
+        })
         .sort((a, b) => {
             const order: Record<Priority, number> = { high: 0, medium: 1, low: 2 };
             return order[a.priority] - order[b.priority];
@@ -107,6 +113,11 @@ export const TodoListProvider = () => {
         );
     };
 
+    const uniqueTags = Array.from(
+        new Set(
+            todos.flatMap((todo) => todo.tags ?? []) // null-safe 평탄화 후 Set으로 중복 제거
+        )
+    );
 
     return {
         input,
@@ -121,6 +132,9 @@ export const TodoListProvider = () => {
         deleteTodo,
         filteredTodos,
         saveTag,
-        deleteTag
+        deleteTag,
+        uniqueTags,
+        selectedTag,
+        setSelectedTag
     };
 };

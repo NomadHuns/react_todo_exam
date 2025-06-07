@@ -32,3 +32,8 @@ export const todoFilterState = atom<Priority | "all" | "completed" | "incomplete
     key: "todoFilterState",
     default: "all",
 });
+
+export const selectedTagState = atom<string>({
+    key: "selectedTagState",
+    default: "",
+});
