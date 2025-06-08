@@ -1,20 +1,19 @@
 import {useRecoilState} from "recoil";
 import {todoListState} from "./TodoAtom";
 import {Todo} from "../../models/Todos";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {authGet, authPut} from "../../commons/Constants";
 import {useNavigate} from "react-router-dom";
 
 export const TodoProvider = () => {
-    const [isLogin, setIsLogin] = useState<boolean>(false);
     const [todos, setTodos] = useRecoilState(todoListState);
     const navigate = useNavigate();
 
     useEffect(() => {
         const token = localStorage.getItem("accessToken");
-        setIsLogin(!!token);
+        const isLoggedIn = !!token;
         const getTodosIfLoggedIn = async () => {
-            if (token) {
+            if (isLoggedIn) {
                 const raw = await authGet("/api/v1/todos", navigate)();
                 const todos: Todo[] = raw.response.map((item: any) => ({
                     id: item.id,
@@ -33,11 +32,23 @@ export const TodoProvider = () => {
         getTodosIfLoggedIn();
     }, []);
 
+    const hasInitialized = useRef(false);
+
     useEffect(() => {
+        if (!hasInitialized.current) {
+            hasInitialized.current = true;
+            return; // 첫 렌더링 시점에는 실행하지 않음
+        }
+
+        const token = localStorage.getItem("accessToken");
+        const isLoggedIn = !!token;
+
         const saveTodosIfLoggedIn = async () => {
-            if (isLogin) {
+            if (isLoggedIn) {
+                console.log("로그인함");
                 await authPut("/api/v1/todos", JSON.stringify(todos), navigate)();
             } else {
+                console.log("로그인안함");
                 localStorage.setItem("todos", JSON.stringify(todos));
             }
         };

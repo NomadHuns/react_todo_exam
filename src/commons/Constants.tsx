@@ -12,7 +12,7 @@ export const PRIORITY_LABELS: Record<Priority, string> = {
 
 export const PRIORITY_OPTIONS: OptionItem[] = [{value: "high", label:"🔴"}, {value: "medium", label:"🟡"}, {value: "low", label:"🔵"}];
 
-export let BASE_URL = 'http://localhost:8080';
+export let BASE_URL = 'http://13.209.230.80:8080';
 
 const relogin = async () : Promise<boolean> => {
     try {
@@ -32,44 +32,6 @@ const relogin = async () : Promise<boolean> => {
         return false;
     }
 }
-
-export const useAuthDelete = (url: string) => {
-    const navigate = useNavigate();
-
-    const fetchData = async () : Promise<any> => {
-        try {
-            const token = localStorage.getItem('accessToken'); // 로컬 스토리지에서 토큰 가져오기
-
-            const response = await axios.delete(`${BASE_URL}${url}`, {
-                headers: {
-                    Authorization: `${token}` // Authorization 헤더에 토큰 추가
-                }
-            });
-
-            const resp : APIResponse<any> = response.data;
-            return resp;
-        } catch (error) {
-            if (axios.isAxiosError(error)) {
-
-                if (error.response?.status === 401) {
-                    const reloginSuccess : boolean = await relogin();
-                    if (reloginSuccess) {
-                        return await fetchData();
-                    } else {
-                        navigate('/login');
-                    }
-                } else if (error.response?.status === 400) {
-                    return error.response.data;
-                }
-
-            } else {
-                console.error('Unknown Error:', error);
-            }
-        }
-    };
-
-    return fetchData;
-};
 
 export const authGet = (url: string, navigate: (path: string) => void) => {
 
@@ -139,47 +101,6 @@ export const authPut = (
                 }
             } else {
                 console.error("Unknown Error:", error);
-            }
-        }
-    };
-
-    return fetchData;
-};
-
-
-export const useAuthPost = (url: string, data: any) => {
-    const navigate = useNavigate();
-
-    const fetchData = async () : Promise<any> => {
-        try {
-            const token = localStorage.getItem('accessToken'); // 로컬 스토리지에서 토큰 가져오기
-
-            const response = await axios.post(`${BASE_URL}${url}`,
-                data,
-                {
-                    headers: {
-                        Authorization: `${token}`
-                    }
-                }
-            );
-
-            return response.data;
-        } catch (error) {
-            if (axios.isAxiosError(error)) {
-
-                if (error.response?.status === 401) {
-                    const reloginSuccess : boolean = await relogin();
-                    if (reloginSuccess) {
-                        return await fetchData();
-                    } else {
-                        navigate('/login');
-                    }
-                } else {
-                    return error.response?.data;
-                }
-
-            } else {
-                console.error('Unknown Error:', error);
             }
         }
     };
