@@ -98,8 +98,15 @@ export const TodoListProvider = () => {
             return todo.tags?.includes(selectedTag);
         })
         .sort((a, b) => {
-            const order: Record<Priority, number> = { high: 0, medium: 1, low: 2 };
-            return order[a.priority] - order[b.priority];
+            const priorityOrder: Record<Priority, number> = { high: 0, medium: 1, low: 2 };
+
+            const priorityDiff = priorityOrder[a.priority] - priorityOrder[b.priority];
+            if (priorityDiff !== 0) return priorityDiff;
+
+            const dateA = a.expiredAt ? new Date(a.expiredAt).getTime() : Infinity;
+            const dateB = b.expiredAt ? new Date(b.expiredAt).getTime() : Infinity;
+
+            return dateA - dateB;
         });
 
     const saveTag = (id: number, tag: string) => {
