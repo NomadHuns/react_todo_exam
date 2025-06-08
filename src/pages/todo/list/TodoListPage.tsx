@@ -7,6 +7,7 @@ import MyTextInput from "../../../components/MyTextInput";
 import TodoListElement from "./components/TodoListElement";
 import MyTagButton from "../../../components/MyTagButton";
 import {Link} from "react-router-dom";
+import {TodoProvider} from "../TodoProvider";
 
 const PRIORITY_OPTIONS: OptionItem[] = [{value: "high", label:"높음"}, {value: "medium", label:"중간"}, {value: "low", label:"낮음"}];
 
@@ -19,9 +20,8 @@ const TodoListPage: React.FC = () => {
         filter,
         setFilter,
         addTodo,
-        putTodo,
-        deleteTodo,
         toggleComplete,
+        deleteTodo,
         filteredTodos,
         saveTag,
         deleteTag,
@@ -31,6 +31,11 @@ const TodoListPage: React.FC = () => {
         completed,
         setCompleted
     } = TodoListProvider();
+
+    const {
+        todos,
+        putTodo
+    } = TodoProvider();
 
     const [openedId, setOpenedId] = useState<number | null>(null);
 

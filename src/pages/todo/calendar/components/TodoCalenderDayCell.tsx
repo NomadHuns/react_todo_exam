@@ -38,7 +38,7 @@ const TodoCalenderDayCell: React.FC<TodoCalenderDayCellProps> = ({ inToday, inCu
             }}>
                 {date}
             </div>
-
+            {/*TODO: 할일 4개 이상일경우 짤림 현상 수정*/}
             {dayTodos.map(todo => (
                 <div
                     key={todo.id}

@@ -1,13 +1,15 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import TodoCalenderDayCell from "./components/TodoCalenderDayCell";
-import {useRecoilState} from "recoil";
-import {todoListState} from "../TodoAtom";
 import {Link} from "react-router-dom";
+import {TodoProvider} from "../TodoProvider";
 
 const CalendarPage: React.FC = () => {
     const daysOfWeek = ["월", "화", "수", "목", "금", "토", "일"];
     const [currentDate, setCurrentDate] = useState(new Date());
-    const [todos, setTodos] = useRecoilState(todoListState);
+    const {
+        todos,
+        putTodo
+    } = TodoProvider();
 
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
