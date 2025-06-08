@@ -67,7 +67,7 @@ const CalendarPage: React.FC = () => {
         <div style={{ padding: "24px" }}>
             <div style={styles.headerRow}>
                 <Link to="/" style={styles.backLink}>←</Link>
-                <h2 style={styles.title}>TODO 캘린더</h2>
+                <h2 style={styles.title}>TODO Calendar</h2>
             </div>
 
             <div style={styles.monthButton}>

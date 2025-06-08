@@ -6,7 +6,7 @@ import MySelectBox, {OptionItem} from "../../../../components/MySelectBox";
 import {formatKoreanDate, getRelativeDayLabel} from "../../../../utils/FormatUtils";
 import MyTagButton from "../../../../components/MyTagButton";
 
-const PRIORITY_OPTIONS: OptionItem[] = [{value: "high", label:"높음"}, {value: "medium", label:"중간"}, {value: "low", label:"낮음"}];
+const PRIORITY_OPTIONS: OptionItem[] = [{value: "high", label:"🔴"}, {value: "medium", label:"🟡"}, {value: "low", label:"🔵"}];
 
 interface TodoListElementProp {
     todo: Todo;

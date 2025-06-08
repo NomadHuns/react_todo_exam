@@ -9,7 +9,7 @@ import MyTagButton from "../../../components/MyTagButton";
 import {Link} from "react-router-dom";
 import {TodoProvider} from "../TodoProvider";
 
-const PRIORITY_OPTIONS: OptionItem[] = [{value: "high", label:"높음"}, {value: "medium", label:"중간"}, {value: "low", label:"낮음"}];
+const PRIORITY_OPTIONS: OptionItem[] = [{value: "high", label:"🔴"}, {value: "medium", label:"🟡"}, {value: "low", label:"🔵"}];
 
 const TodoListPage: React.FC = () => {
     const {
@@ -42,7 +42,7 @@ const TodoListPage: React.FC = () => {
     return (
         <div style={styles.container}>
             <div style={styles.headerRow}>
-                <h2 style={{ margin: 0 }}>TODO Exam</h2>
+                <h2 style={{ margin: 0 }}>TODO List</h2>
                 <Link to="/calendar" style={styles.calendarLink}>캘린더 &gt;</Link>
             </div>
 
