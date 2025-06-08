@@ -8,20 +8,57 @@ import {
     todoInputState,
     todoPriorityState
 } from "./TodoListAtom";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import {todoListState} from "../TodoAtom";
+import {authGet, authPut} from "../../../commons/Constants";
+import {useNavigate} from "react-router-dom";
 
 export const TodoListProvider = () => {
+    const [isLogin, setIsLogin] = useState<boolean>(false);
     const [todos, setTodos] = useRecoilState(todoListState);
     const [input, setInput] = useRecoilState(todoInputState);
     const [priority, setPriority] = useRecoilState(todoPriorityState);
     const [filter, setFilter] = useRecoilState(todoFilterState);
     const [completed, setCompleted] = useRecoilState(todoCompleteState);
     const [selectedTag, setSelectedTag] = useRecoilState(selectedTagState);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const token = localStorage.getItem("accessToken");
+        setIsLogin(!!token);
+        const getTodosIfLoggedIn = async () => {
+            console.log("hello");
+            if (token) {
+                console.log("hello2");
+                const raw = await authGet("/api/v1/todos", navigate)();
+                const todos: Todo[] = raw.response.map((item: any) => ({
+                    id: item.id,
+                    text: item.text,
+                    completed: item.completed,
+                    priority: item.priority,
+                    expiredAt: item.expiredAt || undefined,
+                    createdAt: item.createdAt,
+                    tags: item.tags || [],
+                }));
+
+                setTodos(todos);
+            }
+        };
+
+        getTodosIfLoggedIn();
+    }, []);
 
     // todos 상태 변경시 로컬스토리지에 저장
     useEffect(() => {
-        localStorage.setItem("todos", JSON.stringify(todos));
+        const saveTodosIfLoggedIn = async () => {
+            if (isLogin) {
+                await authPut("/api/v1/todos", JSON.stringify(todos), navigate)();
+            } else {
+                localStorage.setItem("todos", JSON.stringify(todos));
+            }
+        };
+
+        saveTodosIfLoggedIn();
     }, [todos]);
 
     /*

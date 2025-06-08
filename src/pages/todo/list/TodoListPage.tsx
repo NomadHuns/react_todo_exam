@@ -59,6 +59,8 @@ const TodoListPage: React.FC = () => {
                                 localStorage.removeItem("accessToken");
                                 localStorage.removeItem("refreshToken");
                                 setIsLogin(false);
+                                // eslint-disable-next-line no-restricted-globals
+                                location.reload();
                             }}
                             style={styles.calendarLink}
                         >

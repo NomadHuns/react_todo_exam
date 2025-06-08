@@ -4,8 +4,9 @@ import {BASE_URL} from "../../../commons/Constants";
 import {useNavigate} from "react-router-dom";
 
 const LoginPage: React.FC = () => {
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
+    const [isLogin, setIsLogin] = useState<boolean>(false);
+    const [username, setUsername] = useState("tmember1");
+    const [password, setPassword] = useState("1234");
     const [error, setError] = useState("");
     const navigate = useNavigate();
 

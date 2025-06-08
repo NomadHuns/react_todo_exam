@@ -71,8 +71,7 @@ export const useAuthDelete = (url: string) => {
     return fetchData;
 };
 
-export const useAuthGet = (url: string) => {
-    const navigate = useNavigate();
+export const authGet = (url: string, navigate: (path: string) => void) => {
 
     const fetchData = async () : Promise<any> => {
         try {
@@ -109,47 +108,44 @@ export const useAuthGet = (url: string) => {
     return fetchData;
 };
 
-export const useAuthPut = (url: string, data: any) => {
-    const navigate = useNavigate();
-
-    let count = 0;
-
-    const fetchData = async () : Promise<any> => {
+export const authPut = (
+    url: string,
+    data: any,
+    navigate: (path: string) => void
+) => {
+    const fetchData = async (): Promise<any> => {
         try {
-            const token = localStorage.getItem('accessToken'); // 로컬 스토리지에서 토큰 가져오기
+            const token = localStorage.getItem("accessToken");
 
-            const response = await axios.put(`${BASE_URL}${url}`,
-                data,
-                {
-                    headers: {
-                        Authorization: `${token}`
-                    }
-                }
-            );
+            const response = await axios.put(`${BASE_URL}${url}`, data, {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `${token}`,
+                },
+            });
 
             return response.data;
         } catch (error) {
             if (axios.isAxiosError(error)) {
-
                 if (error.response?.status === 401) {
-                    const reloginSuccess : boolean = await relogin();
+                    const reloginSuccess: boolean = await relogin();
                     if (reloginSuccess) {
                         return await fetchData();
                     } else {
-                        navigate('/login');
+                        navigate("/login");
                     }
                 } else {
                     return error.response?.data;
                 }
-
             } else {
-                console.error('Unknown Error:', error);
+                console.error("Unknown Error:", error);
             }
         }
     };
 
     return fetchData;
 };
+
 
 export const useAuthPost = (url: string, data: any) => {
     const navigate = useNavigate();
