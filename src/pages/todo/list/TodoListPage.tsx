@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Priority} from "../../../models/Todos";
 import {TodoListProvider} from "./TodoListProvider";
 import MySelectBox from "../../../components/MySelectBox";
@@ -37,11 +37,36 @@ const TodoListPage: React.FC = () => {
     } = TodoProvider();
 
     const [openedId, setOpenedId] = useState<number | null>(null);
+    const [isLogin, setIsLogin] = useState<boolean>(false);
+
+    useEffect(() => {
+        const token = localStorage.getItem("accessToken");
+        setIsLogin(!!token);
+    }, []);
 
     return (
         <div style={styles.container}>
             <div style={styles.headerRow}>
-                <h2 style={{ margin: 0 }}>TODO List</h2>
+                <div style={styles.titleRow}>
+                    <h2 style={{ margin: 0 }}>TODO List</h2>
+                    {!isLogin && (
+                        <Link to="/login" style={styles.calendarLink}>로그인 &gt;</Link>
+                    )}
+                    {isLogin && (
+                        <Link
+                            to="/"
+                            onClick={() => {
+                                localStorage.removeItem("accessToken");
+                                localStorage.removeItem("refreshToken");
+                                setIsLogin(false);
+                            }}
+                            style={styles.calendarLink}
+                        >
+                            로그아웃 &gt;
+                        </Link>
+                    )}
+                </div>
+
                 <Link to="/calendar" style={styles.calendarLink}>캘린더 &gt;</Link>
             </div>
 
@@ -160,6 +185,11 @@ const TodoListPage: React.FC = () => {
 };
 
 const styles: Record<string, React.CSSProperties> = {
+    titleRow: {
+        display: "flex",
+        alignItems: "center",
+        gap: "10px",
+    },
     headerRow: {
         display: "flex",
         justifyContent: "space-between",
