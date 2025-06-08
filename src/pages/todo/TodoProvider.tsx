@@ -45,10 +45,8 @@ export const TodoProvider = () => {
 
         const saveTodosIfLoggedIn = async () => {
             if (isLoggedIn) {
-                console.log("로그인함");
                 await authPut("/api/v1/todos", JSON.stringify(todos), navigate)();
             } else {
-                console.log("로그인안함");
                 localStorage.setItem("todos", JSON.stringify(todos));
             }
         };
