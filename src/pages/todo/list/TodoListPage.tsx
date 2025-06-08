@@ -53,7 +53,11 @@ const TodoListPage: React.FC = () => {
                     value={priority}
                     onChange={(e) => setPriority(e as Priority)}
                     options={PRIORITY_OPTIONS} />
-                <MyButton onClick={addTodo} text={"+ 추가"} />
+                <MyButton onClick={() => {
+                    let newTodo = addTodo();
+                    if (typeof newTodo == "undefined") setOpenedId(null);
+                    if (typeof newTodo != "undefined") setOpenedId(newTodo.id);
+                }} text={"+ 추가"} />
             </div>
 
             <div style={styles.filterRow}>
@@ -88,8 +92,10 @@ const TodoListPage: React.FC = () => {
                         key={f}
                         onClick={() => {
                             setFilter(f as Priority | "all");
-                            if (f !== "all" && f !== "completed" && f !== "incomplete") {
+                            if (f !== "all") {
                                 setPriority(f as Priority);
+                            } else {
+                                setPriority("medium");
                             }
                             setOpenedId(null);
                         }}

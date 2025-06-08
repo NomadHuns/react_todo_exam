@@ -1,4 +1,3 @@
-// hooks/useTodos.ts
 import {Priority, Todo} from "../../../models/Todos";
 import {getKoreanISOString} from "../../../utils/FormatUtils";
 import {useRecoilState} from "recoil";
@@ -42,17 +41,18 @@ export const TodoListProvider = () => {
             createdAt: getKoreanISOString(),
             tags: selectedTag !== "" ? [selectedTag] : []
         };
-        // 기존 투두 리스트의 앞에 새로 인스턴스된 객체를 깊은 복사 형태로 생성하여 상태 변경
+        // 기존 할일 리스트의 앞에 새로 인스턴스된 객체를 깊은 복사 형태로 생성하여 상태 변경
         setTodos([newTodo, ...todos]);
         // 인풋값 상태 변경
         setInput("");
+        return newTodo;
     };
 
     /*
         할일 요소 완료 토글 함수
     */
     const toggleComplete = (id: number) => {
-        // 선택된 id 의 투두의 completed 필드값을 수정하여 상태 변경
+        // 선택된 id 의 할일의 completed 필드값을 수정하여 상태 변경
         setTodos(
             todos.map((todo) =>
                 todo.id === id ? { ...todo, completed: !todo.completed } : todo
@@ -123,7 +123,7 @@ export const TodoListProvider = () => {
 
     const uniqueTags = Array.from(
         new Set(
-            todos.flatMap((todo) => todo.tags ?? []) // null-safe 평탄화 후 Set으로 중복 제거
+            todos.flatMap((todo) => todo.tags ?? [])
         )
     );
 
