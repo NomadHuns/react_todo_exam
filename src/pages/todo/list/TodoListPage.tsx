@@ -6,6 +6,7 @@ import MyButton from "../../../components/MyButton";
 import MyTextInput from "../../../components/MyTextInput";
 import TodoListElement from "./components/TodoListElement";
 import MyTagButton from "../../../components/MyTagButton";
+import {Link} from "react-router-dom";
 
 const PRIORITY_OPTIONS: OptionItem[] = [{value: "high", label:"높음"}, {value: "medium", label:"중간"}, {value: "low", label:"낮음"}];
 
@@ -35,7 +36,10 @@ const TodoListPage: React.FC = () => {
 
     return (
         <div style={styles.container}>
-            <h2>TODO Exam</h2>
+            <div style={styles.headerRow}>
+                <h2 style={{ margin: 0 }}>TODO Exam</h2>
+                <Link to="/calendar" style={styles.calendarLink}>캘린더 &gt;</Link>
+            </div>
 
             <div style={styles.inputRow}>
                 <MyTextInput value={input} onChange={(e) => setInput(e)}
@@ -151,6 +155,19 @@ const TodoListPage: React.FC = () => {
 };
 
 const styles: Record<string, React.CSSProperties> = {
+    headerRow: {
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        marginBottom: 20,
+    },
+    calendarLink: {
+        fontSize: "14px",
+        color: "#2563eb",
+        textDecoration: "none",
+        fontWeight: "bold",
+        cursor: "pointer",
+    },
     container: {
         maxWidth: 500,
         margin: "50px auto",

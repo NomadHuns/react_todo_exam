@@ -4,13 +4,20 @@ import './index.css';
 import reportWebVitals from './reportWebVitals';
 import { RecoilRoot } from 'recoil';
 import TodoListPage from "./pages/todo/list/TodoListPage";
+import CalendarPage from "./pages/todo/calendar/TodoCalendarPage";
+import {BrowserRouter, Route, Routes} from "react-router-dom";
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
     <RecoilRoot>
-        <TodoListPage />
+        <BrowserRouter>
+            <Routes>
+                <Route path="/" element={<TodoListPage />} />
+                <Route path="/calendar" element={<CalendarPage />} />
+            </Routes>
+        </BrowserRouter>
     </RecoilRoot>
 );
 

@@ -1,19 +1,5 @@
 import {atom} from "recoil";
-import {Priority, Todo} from "../../../models/Todos";
-
-export const todoListState = atom<Todo[]>({
-    key: "todoListState",
-    default: (() => {
-        const stored = localStorage.getItem("todos");
-        console.log(stored);
-        try {
-            const parsed = stored ? JSON.parse(stored) : [];
-            return Array.isArray(parsed) ? parsed : [];
-        } catch {
-            return [];
-        }
-    })(),
-});
+import {Priority} from "../../../models/Todos";
 
 // 새 투두 입력값 상태
 export const todoInputState = atom<string>({

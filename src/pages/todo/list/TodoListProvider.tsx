@@ -7,10 +7,10 @@ import {
     todoCompleteState,
     todoFilterState,
     todoInputState,
-    todoListState,
     todoPriorityState
 } from "./TodoListAtom";
 import {useEffect} from "react";
+import {todoListState} from "../TodoAtom";
 
 export const TodoListProvider = () => {
     const [todos, setTodos] = useRecoilState(todoListState);
