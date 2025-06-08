@@ -44,13 +44,21 @@ const CalendarPage: React.FC = () => {
 
         calendarCells.push(
             <TodoCalenderDayCell
-                key={i}
+                key={"i"+i}
                 date={date}
                 inToday={inToday}
                 inCurrentMonth={inCurrentMonth}
                 todos={todos}
                 year={year}
                 month={month}
+                onDropTodo={(todoId, newDate) => {
+                    const target = todos.find(todo => todo.id === todoId);
+                    if (!target) return;
+                    putTodo({
+                        ...target,
+                        expiredAt: newDate,
+                    });
+                }}
             />
         );
     }

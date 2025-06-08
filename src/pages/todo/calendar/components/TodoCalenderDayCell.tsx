@@ -8,9 +8,10 @@ interface TodoCalenderDayCellProps {
     year: number;
     month: number;
     todos: Todo[];
+    onDropTodo: (todoId: number, newDate: string) => void;
 }
 
-const TodoCalenderDayCell: React.FC<TodoCalenderDayCellProps> = ({ inToday, inCurrentMonth, date, year, month, todos }) => {
+const TodoCalenderDayCell: React.FC<TodoCalenderDayCellProps> = ({ inToday, inCurrentMonth, date, year, month, todos, onDropTodo }) => {
     if (!inCurrentMonth || date < 1) {
         return <div style={{ height: "80px", backgroundColor: "#f5f5f5" }} />;
     }
@@ -20,6 +21,16 @@ const TodoCalenderDayCell: React.FC<TodoCalenderDayCellProps> = ({ inToday, inCu
 
     return (
         <div
+            onDragOver={(e) => {
+                e.preventDefault();
+            }}
+            onDrop={(e) => {
+                e.preventDefault();
+                const todoId = parseInt(e.dataTransfer.getData("todoId"), 10);
+                if (!isNaN(todoId)) {
+                    onDropTodo(todoId, dateString);
+                }
+            }}
             style={{
                 height: "80px",
                 border: "1px solid #ddd",
@@ -42,12 +53,17 @@ const TodoCalenderDayCell: React.FC<TodoCalenderDayCellProps> = ({ inToday, inCu
             {dayTodos.map(todo => (
                 <div
                     key={todo.id}
+                    draggable
+                    onDragStart={(e) => {
+                        e.dataTransfer.setData("todoId", todo.id.toString());
+                    }}
                     style={{
                         fontSize: "11px",
                         whiteSpace: "nowrap",
                         overflow: "hidden",
                         textOverflow: "ellipsis",
-                        color: todo.completed ? "#9ca3af" : "#111"
+                        color: todo.completed ? "#9ca3af" : "#111",
+                        cursor: "grab"
                     }}
                 >
                     • {todo.text}
