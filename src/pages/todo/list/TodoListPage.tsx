@@ -26,7 +26,9 @@ const TodoListPage: React.FC = () => {
         deleteTag,
         uniqueTags,
         selectedTag,
-        setSelectedTag
+        setSelectedTag,
+        completed,
+        setCompleted
     } = TodoListProvider();
 
     const [openedId, setOpenedId] = useState<number | null>(null);
@@ -47,13 +49,13 @@ const TodoListPage: React.FC = () => {
             </div>
 
             <div style={styles.filterRow}>
-                {["all", "completed", "incomplete", ...PRIORITY_OPTIONS.map(value => value.value)].map((f) => (
+                {["all", "completed", "incomplete"].map((f) => (
                     <MyButton
-                        key={f}
+                        key={"c" + f}
                         onClick={() => {
-                            setFilter(f as Priority | "all" | "completed" | "incomplete");
+                            setCompleted(f);
                             if (f !== "all" && f !== "completed" && f !== "incomplete") {
-                                setPriority(f as Priority);
+                                setCompleted(f);
                             }
                             setOpenedId(null);
                         }}
@@ -62,13 +64,35 @@ const TodoListPage: React.FC = () => {
                                 ? "전체"
                                 : f === "completed"
                                     ? "완료됨"
-                                    : f === "incomplete"
-                                        ? "미완료"
-                                        : f === "high"
-                                            ? "높음"
-                                            : f === "medium"
-                                                ? "중간"
-                                                : "낮음"
+                                    : "미완료"
+                        }
+                        style={{
+                            ...styles.filterBtn,
+                            fontWeight: completed === f ? "bold" : "normal",
+                        }}
+                    />
+                ))}
+            </div>
+
+            <div style={styles.filterRow}>
+                {["all", ...PRIORITY_OPTIONS.map(value => value.value)].map((f) => (
+                    <MyButton
+                        key={f}
+                        onClick={() => {
+                            setFilter(f as Priority | "all");
+                            if (f !== "all" && f !== "completed" && f !== "incomplete") {
+                                setPriority(f as Priority);
+                            }
+                            setOpenedId(null);
+                        }}
+                        text={
+                            f === "all"
+                                ? "전체"
+                                : f === "high"
+                                    ? "높음"
+                                    : f === "medium"
+                                        ? "중간"
+                                        : "낮음"
                         }
                         style={{
                             ...styles.filterBtn,

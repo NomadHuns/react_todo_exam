@@ -2,7 +2,14 @@
 import {Priority, Todo} from "../../../models/Todos";
 import {getKoreanISOString} from "../../../utils/FormatUtils";
 import {useRecoilState} from "recoil";
-import {selectedTagState, todoFilterState, todoInputState, todoListState, todoPriorityState} from "./TodoListAtom";
+import {
+    selectedTagState,
+    todoCompleteState,
+    todoFilterState,
+    todoInputState,
+    todoListState,
+    todoPriorityState
+} from "./TodoListAtom";
 import {useEffect} from "react";
 
 export const TodoListProvider = () => {
@@ -10,6 +17,7 @@ export const TodoListProvider = () => {
     const [input, setInput] = useRecoilState(todoInputState);
     const [priority, setPriority] = useRecoilState(todoPriorityState);
     const [filter, setFilter] = useRecoilState(todoFilterState);
+    const [completed, setCompleted] = useRecoilState(todoCompleteState);
     const [selectedTag, setSelectedTag] = useRecoilState(selectedTagState);
 
     // todos 상태 변경시 로컬스토리지에 저장
@@ -28,8 +36,8 @@ export const TodoListProvider = () => {
         const newTodo: Todo = {
             id: Date.now(),
             text: input,
-            completed: false,
-            priority,
+            completed: completed === "completed",
+            priority: priority,
             expiredAt: undefined,
             createdAt: getKoreanISOString(),
             tags: selectedTag !== "" ? [selectedTag] : []
@@ -76,9 +84,12 @@ export const TodoListProvider = () => {
     */
     const filteredTodos = todos
         .filter((todo) => {
+            if (completed === "all") return true;
+            if (completed === "completed") return todo.completed;
+            if (completed === "incomplete") return !todo.completed;
+        })
+        .filter((todo) => {
             if (filter === "all") return true;
-            if (filter === "completed") return todo.completed;
-            if (filter === "incomplete") return !todo.completed;
             return todo.priority === filter;
         })
         .filter((todo) => {
@@ -136,6 +147,8 @@ export const TodoListProvider = () => {
         deleteTag,
         uniqueTags,
         selectedTag,
-        setSelectedTag
+        setSelectedTag,
+        completed,
+        setCompleted
     };
 };
