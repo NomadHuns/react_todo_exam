@@ -2,6 +2,8 @@ import React, {useState} from "react";
 import TodoCalenderDayCell from "./components/TodoCalenderDayCell";
 import {Link} from "react-router-dom";
 import {TodoProvider} from "../TodoProvider";
+import {Priority} from "../../../models/Todos";
+import {PRIORITY_LABELS} from "../../../commons/Constants";
 
 const CalendarPage: React.FC = () => {
     const daysOfWeek = ["월", "화", "수", "목", "금", "토", "일"];
@@ -55,7 +57,14 @@ const CalendarPage: React.FC = () => {
         );
     }
 
-    const unscheduledTodos = todos.filter(todo => !todo.completed).filter(todo => !todo.expiredAt);
+    const unscheduledTodos = todos
+        .filter(todo => !todo.completed)
+        .filter(todo => !todo.expiredAt)
+        .sort((a, b) => {
+            const priorityOrder: Record<Priority, number> = { high: 0, medium: 1, low: 2 };
+
+            return priorityOrder[a.priority] - priorityOrder[b.priority];
+        });
 
     return (
         <>
@@ -147,7 +156,7 @@ const CalendarPage: React.FC = () => {
                                     padding: "6px 8px"
                                 }}
                             >
-                                • {todo.text}
+                                {PRIORITY_LABELS[todo.priority]} {todo.text}
                             </li>
                         ))}
                     </ul>

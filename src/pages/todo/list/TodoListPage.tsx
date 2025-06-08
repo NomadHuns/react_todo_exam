@@ -1,15 +1,14 @@
 import React, {useState} from "react";
 import {Priority} from "../../../models/Todos";
 import {TodoListProvider} from "./TodoListProvider";
-import MySelectBox, {OptionItem} from "../../../components/MySelectBox";
+import MySelectBox from "../../../components/MySelectBox";
 import MyButton from "../../../components/MyButton";
 import MyTextInput from "../../../components/MyTextInput";
 import TodoListElement from "./components/TodoListElement";
 import MyTagButton from "../../../components/MyTagButton";
 import {Link} from "react-router-dom";
 import {TodoProvider} from "../TodoProvider";
-
-const PRIORITY_OPTIONS: OptionItem[] = [{value: "high", label:"🔴"}, {value: "medium", label:"🟡"}, {value: "low", label:"🔵"}];
+import {PRIORITY_OPTIONS} from "../../../commons/Constants";
 
 const TodoListPage: React.FC = () => {
     const {

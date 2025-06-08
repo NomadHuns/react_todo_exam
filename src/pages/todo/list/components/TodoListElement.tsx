@@ -1,12 +1,11 @@
-import {Priority, Todo} from "../../../../models/Todos";
+import {Todo} from "../../../../models/Todos";
 import React, {useState} from "react";
 import MyButton from "../../../../components/MyButton";
 import MyTextInput from "../../../../components/MyTextInput";
-import MySelectBox, {OptionItem} from "../../../../components/MySelectBox";
+import MySelectBox from "../../../../components/MySelectBox";
 import {formatKoreanDate, getRelativeDayLabel} from "../../../../utils/FormatUtils";
 import MyTagButton from "../../../../components/MyTagButton";
-
-const PRIORITY_OPTIONS: OptionItem[] = [{value: "high", label:"🔴"}, {value: "medium", label:"🟡"}, {value: "low", label:"🔵"}];
+import {PRIORITY_LABELS, PRIORITY_OPTIONS} from "../../../../commons/Constants";
 
 interface TodoListElementProp {
     todo: Todo;
@@ -20,12 +19,6 @@ interface TodoListElementProp {
     saveTag: (value: string) => void;
     deleteTag: (value: string) => void;
 }
-
-const PRIORITY_LABELS: Record<Priority, string> = {
-    high: "🔴",
-    medium: "🟡",
-    low: "🔵",
-};
 
 const TodoListElement: React.FC<TodoListElementProp> = ({ todo, toggleComplete, deleteTodo, changeText, setPriority, openedId, setOpenedId, setExpiredAt, saveTag, deleteTag }) => {
     const isOpen = openedId === todo.id;

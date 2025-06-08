@@ -1,5 +1,6 @@
 import React, {useState} from "react";
-import {Todo} from "../../../../models/Todos";
+import {Priority, Todo} from "../../../../models/Todos";
+import {PRIORITY_LABELS} from "../../../../commons/Constants";
 
 interface TodoCalenderDayCellProps {
     inToday: boolean;
@@ -19,8 +20,18 @@ const TodoCalenderDayCell: React.FC<TodoCalenderDayCellProps> = ({inToday, inCur
     }
 
     const dateString = `${year}-${String(month + 1).padStart(2, "0")}-${String(date).padStart(2, "0")}`;
-    const dayTodos = todos.filter(todo => todo.expiredAt === dateString);
-    const visibleTodos = dayTodos.slice(0, 3);
+    const dayTodos = todos.filter(todo => todo.expiredAt === dateString)
+        .sort((a, b) => {
+            const priorityOrder: Record<Priority, number> = { high: 0, medium: 1, low: 2 };
+
+            return priorityOrder[a.priority] - priorityOrder[b.priority];
+        });
+    const visibleTodos = dayTodos.slice(0, 3)
+        .sort((a, b) => {
+            const priorityOrder: Record<Priority, number> = { high: 0, medium: 1, low: 2 };
+
+            return priorityOrder[a.priority] - priorityOrder[b.priority];
+        });
     const hiddenCount = dayTodos.length - visibleTodos.length;
 
     return (
@@ -58,7 +69,7 @@ const TodoCalenderDayCell: React.FC<TodoCalenderDayCellProps> = ({inToday, inCur
                             ...(todo.completed ? styles.completedTodo : {})
                         }}
                     >
-                        • {todo.text}
+                        {PRIORITY_LABELS[todo.priority]} {todo.text}
                     </div>
                 ))}
 
@@ -83,7 +94,7 @@ const TodoCalenderDayCell: React.FC<TodoCalenderDayCellProps> = ({inToday, inCur
                                     color: todo.completed ? "#9ca3af" : "#111",
                                     textDecoration: todo.completed ? "line-through" : "none"
                                 }}>
-                                    {todo.text}
+                                    {PRIORITY_LABELS[todo.priority]} {todo.text}
                                 </li>
                             ))}
                         </ul>
@@ -102,11 +113,11 @@ const TodoCalenderDayCell: React.FC<TodoCalenderDayCellProps> = ({inToday, inCur
 
 const styles: Record<string, React.CSSProperties> = {
     emptyCell: {
-        height: "80px",
+        height: "90px",
         backgroundColor: "#f5f5f5"
     },
     cell: {
-        height: "80px",
+        height: "90px",
         border: "1px solid #ddd",
         borderRadius: "6px",
         padding: "4px",
